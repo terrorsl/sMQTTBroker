@@ -26,9 +26,15 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 
 ## TODO
 
+* [ ] Client Identifier
+* [ ] DUP
 * [ ] keep alive
 * [ ] user/password
 * [ ] append support Qos 1
+* [ ] PUBACK
+* [ ] PUBREC
+* [ ] PUBREL
+* [ ] PUBCOMP
 * [ ] append support MQTT 5.0
 
 ## License
