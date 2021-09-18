@@ -26,9 +26,10 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 
 ## TODO
 
-* user/password
-* append support Qos 1
-* append support MQTT 5.0
+* [ ] keep alive
+* [ ] user/password
+* [ ] append support Qos 1
+* [ ] append support MQTT 5.0
 
 ## License
 MIT License [LICENSE](https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE).
