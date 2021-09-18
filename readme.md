@@ -2,7 +2,11 @@
 
 Simple MQTT Broker is light and fast mqtt broker for ESP32, ESP8266
 
-[![Release](https://img.shields.io/github/v/release/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/releases/latest)
+Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/releases/latest)
+![GitHub Release Date](https://img.shields.io/github/release-date/terrorsl/sMQTTBroker)
+![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/terrorsl/sMQTTBroker/latest)
+![GitHub all releases](https://img.shields.io/github/downloads/terrorsl/sMQTTBroker/total)
+
 [![Check Arduino](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml/badge.svg?branch=main)](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml)
 
 ## Features
