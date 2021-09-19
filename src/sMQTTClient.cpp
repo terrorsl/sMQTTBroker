@@ -73,24 +73,31 @@ void sMQTTClient::processMessage()
 					message.getString(payload, len);
 					payload += len;
 				}
+				std::string username;
 				if (mqtt_flags&sMQTTUserNameFlag)
 				{
 					message.getString(payload, len);
 
-					clientId = std::string(payload, len);
-					SMQTT_LOGD("message user:%s", clientId.c_str());
+					username = std::string(payload, len);
+					SMQTT_LOGD("message user:%s", username.c_str());
 
 					payload += len;
 				}
+				std::string password;
 				if (mqtt_flags&sMQTTPasswordFlag)
 				{
 					message.getString(payload, len);
-					clientId = std::string(payload, len);
-					SMQTT_LOGD("message password:%s", clientId.c_str());
+					password = std::string(payload, len);
+					SMQTT_LOGD("message password:%s", password.c_str());
 					payload += len;
 				}
 
+				if (_parent->isClientConnected(this, clientId) == false)
+					_parent->onConnect(this, username, password);
+				else
+					status = 0x02;
 			}
+
 			sMQTTMessage msg(sMQTTMessage::Type::ConnAck);
 			msg.add(0);	// Session present (not implemented)
 			msg.add(status); // Connection accepted

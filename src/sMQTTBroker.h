@@ -19,7 +19,9 @@ public:
 	bool isTopicValidName(const char *filter);
 	void updateRetainedTopic(sMQTTTopic *topic);
 
-	virtual void onConnect(sMQTTClient*);
+	bool isClientConnected(sMQTTClient *client, const std::string &clientId);
+
+	virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password);
 	virtual void onRemove(sMQTTClient*);
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);

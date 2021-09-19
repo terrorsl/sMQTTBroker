@@ -159,7 +159,22 @@ void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 		}
 	}
 };
-void sMQTTBroker::onConnect(sMQTTClient*) {
+bool sMQTTBroker::isClientConnected(sMQTTClient *client, const std::string &clientId)
+{
+	sMQTTClientList::iterator clit;
+	for (clit = clients.begin(); clit != clients.end(); clit++)
+	{
+		sMQTTClient *c = *clit;
+		if (c == client)
+			continue;
+		if (c->getClientId() == clientId)
+			return true;
+	}
+	return false;
+};
+bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, const std::string &password) {
+	// do nothing here
+	return true;
 };
 void sMQTTBroker::onRemove(sMQTTClient*) {
 };
