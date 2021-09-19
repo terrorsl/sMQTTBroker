@@ -23,6 +23,24 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
   ~~(you can use the Arduino library manager and search for sMQTTBroker)~~
 * make sMQTTConfig.h
 
+```c++
+#include<sMQTTBroker.h>
+```
+```c++
+sMQTTBroker broker;
+#define PORT 1883
+```
+```c++
+void setup(){
+  broker.init(PORT);
+};
+```
+```c++
+void loop(){
+  broker.update();
+};
+```
+
 ## Examples
 [SimpleBroker](https://github.com/terrorsl/sMQTTBroker/examples/simplebroker)
 
