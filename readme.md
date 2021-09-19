@@ -7,6 +7,10 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 ![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/terrorsl/sMQTTBroker/latest)
 ![GitHub all releases](https://img.shields.io/github/downloads/terrorsl/sMQTTBroker/total)
 
+[![Esp8266](https://img.shields.io/badge/platform-ESP8266-green)](https://www.espressif.com/en/products/socs/esp8266)
+[![Esp32](https://img.shields.io/badge/platform-ESP32-green)](https://www.espressif.com/en/products/socs/esp32)
+[![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
+
 [![Check Arduino](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml/badge.svg?branch=main)](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml)
 
 ## Features
@@ -38,4 +42,4 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 * [ ] append support MQTT 5.0
 
 ## License
-MIT License [LICENSE](https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE).
+[![GitHub](https://img.shields.io/github/license/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE)
