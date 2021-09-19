@@ -13,11 +13,14 @@ public:
 
 	void publish(sMQTTTopic *topic, sMQTTMessage *msg);
 
-	bool subscribe_topic(sMQTTClient *client, const char *topic);
-	void unsubscribe_topic(sMQTTClient *client, const char *topic);
+	bool subscribe(sMQTTClient *client, const char *topic);
+	void unsubscribe(sMQTTClient *client, const char *topic);
 
 	bool isTopicValidName(const char *filter);
 	void updateRetainedTopic(sMQTTTopic *topic);
+
+	virtual void onConnect(sMQTTClient*);
+	virtual void onRemove(sMQTTClient*);
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 

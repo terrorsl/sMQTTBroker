@@ -14,7 +14,7 @@ void sMQTTBroker::update()
 	WiFiClient client = _server->available();
 	if (client)
 	{
-		ESP_LOGD(SMQTTTAG, "New Client");
+		SMQTT_LOGD("New Client");
 		clients.push_back(new sMQTTClient(this, &client));
 	}
 #endif
@@ -28,40 +28,34 @@ void sMQTTBroker::update()
 		{
 			delete c;
 			clit=clients.erase(clit);
-			MSQTT_LOGD("Clients %d", clients.size());
+			SMQTT_LOGD("Clients %d", clients.size());
 			if (clit == clients.end())
 				break;
 		}
 	}
 };
-bool sMQTTBroker::subscribe_topic(sMQTTClient *client, const char *topic)
+bool sMQTTBroker::subscribe(sMQTTClient *client, const char *topic)
 {
-	sMQTTTopic *newTopic = new sMQTTTopic(topic);
-
-	if (isTopicValidName(newTopic->Name()) == false)
-	{
-		delete newTopic;
+	if (isTopicValidName(topic) == false)
 		return false;
-	}
-
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
-		if (strcmp((*sub)->Name(), newTopic->Name()) == 0)
+		if (strcmp((*sub)->Name(), topic) == 0)
 		{
-			delete newTopic;
 			(*sub)->subscribe(client);
 			findRetainTopic(*sub, client);
 			return true;
 		}
 	}
+	sMQTTTopic *newTopic = new sMQTTTopic(topic);
 	newTopic->subscribe(client);
 	subscribes.push_back(newTopic);
 
 	findRetainTopic(newTopic, client);
 	return true;
 };
-void sMQTTBroker::unsubscribe_topic(sMQTTClient *client, const char *topic)
+void sMQTTBroker::unsubscribe(sMQTTClient *client, const char *topic)
 {
 	sMQTTTopicList::iterator it;
 	for (it = subscribes.begin(); it != subscribes.end(); it++)
@@ -126,7 +120,7 @@ bool sMQTTBroker::isTopicValidName(const char *filter)
 };
 void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 {
-	ESP_LOGD(SMQTTTAG, "updateRetainedTopic %s", topic->Name());
+	SMQTT_LOGD("updateRetainedTopic %s", topic->Name());
 	sMQTTTopicList::iterator it;
 	for (it = retains.begin(); it != retains.end(); it++)
 	{
@@ -145,13 +139,13 @@ void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 };
 void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 {
-	ESP_LOGD(SMQTTTAG, "findRetainTopic %s %d", topic->Name(), retains.size());
+	SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
 	sMQTTTopicList::iterator it;
 	for (it = retains.begin(); it != retains.end(); it++)
 	{
 		if (topic->match(*it))
 		{
-			ESP_LOGD(SMQTTTAG, "findRetainTopic %s", topic->Name());
+			SMQTT_LOGD("findRetainTopic %s", topic->Name());
 			sMQTTMessage msg(sMQTTMessage::Type::Publish);
 			msg.add((*it)->Name(), strlen((*it)->Name()));
 			// msg_id
@@ -164,4 +158,8 @@ void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 			break;
 		}
 	}
+};
+void sMQTTBroker::onConnect(sMQTTClient*) {
+};
+void sMQTTBroker::onRemove(sMQTTClient*) {
 };

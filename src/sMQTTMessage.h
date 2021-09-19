@@ -22,6 +22,7 @@ public:
 		ConnAck = 0x20,
 		Publish = 0x30,
 		PubAck = 0x40,
+		PubRec = 0x50,
 		Subscribe = 0x80,
 		SubAck = 0x90,
 		UnSubscribe = 0xA0,

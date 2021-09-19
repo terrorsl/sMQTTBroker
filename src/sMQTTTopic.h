@@ -11,7 +11,7 @@ public:
 	sMQTTTopic(const char *name);
 	sMQTTTopic(const char *name, unsigned short nameLen, const char *payload, unsigned short payloadLen);
 	sMQTTTopic(sMQTTTopic *other);
-	~sMQTTTopic();
+	virtual ~sMQTTTopic();
 	void update(sMQTTTopic *other)
 	{
 		if (_name)
@@ -54,5 +54,7 @@ typedef std::vector<sMQTTTopic*> sMQTTTopicList;
 
 class sMQTTTopicRetain :public sMQTTTopic
 {
+public:
+	sMQTTTopicRetain(const char *name, const char *payload);
 };
 #endif
