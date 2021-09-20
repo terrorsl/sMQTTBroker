@@ -24,3 +24,6 @@ jobs:
         uses: actions/checkout@v2
       - name: arduino/arduino-lint-action
         uses: arduino/arduino-lint-action@v1.0.0
+        with:
+            library-manager: update
+            project-type: library
