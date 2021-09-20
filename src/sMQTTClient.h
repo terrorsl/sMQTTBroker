@@ -31,13 +31,16 @@ public:
 	const std::string &getClientId() {
 		return clientId;
 	};
+	//bool is
 private:
 	void processMessage();
+	void updateLiveStatus();
 
 	char mqtt_flags;
 	bool mqtt_connected;
 	std::string clientId;
 	unsigned short keepAlive;
+	unsigned long aliveMillis;
 
 	sMQTTBroker *_parent;
 	TCPClient *_client;

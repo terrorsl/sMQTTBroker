@@ -6,7 +6,16 @@ sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):_parent(parent)
 };
 void sMQTTClient::update()
 {
-	//if(alive
+	unsigned long currentMillis;
+#if defined(ESP8266) || defined(ESP32)
+	currentMillis = millis();
+#endif
+	if (keepAlive!=0 && aliveMillis > currentMillis)
+	{
+		SMQTT_LOGD("aliveMillis > currentMillis");
+		//_client->stop();
+		break;
+	}
 	while (_client->available()>0)
 	{
 		message.incoming(_client->read());
@@ -42,13 +51,11 @@ void sMQTTClient::processMessage()
 			unsigned char status = 0;
 			if (strncmp("MQTT", header + 2, 4))
 			{
-				//debug("bad mqtt header");
-				//break;
+				//TODO: close connection
 			}
 			if (header[6] != 0x04)
 			{
 				status = sMQTTConnReturnUnacceptableProtocolVersion;
-				//debug("unknown level");
 				// Level 3.1.1
 			}
 			else
@@ -191,4 +198,14 @@ void sMQTTClient::processMessage()
 		}
 		break;
 	}
+	updateLiveStatus();
+};
+void sMQTTClient::updateLiveStatus()
+{
+	if (keepAlive)
+#if defined(ESP8266) || defined(ESP32)
+		aliveMillis = keepAlive * 1000 + millis();
+#endif
+	else
+		aliveMillis = 0;
 };
