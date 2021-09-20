@@ -11,6 +11,13 @@ class sMQTTBroker;
 #define sMQTTWillQoSFlag 0x18
 #define sMQTTWillFlag 0x4
 
+#define sMQTTConnReturnAccepted 0x0
+#define sMQTTConnReturnUnacceptableProtocolVersion 0x1
+#define sMQTTConnReturnIdentifierRejected 0x2
+#define sMQTTConnReturnServerUnavailable 0x3
+#define sMQTTConnReturnBadUsernameOrPassword 0x4
+
+
 class sMQTTClient
 {
 public:

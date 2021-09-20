@@ -47,7 +47,7 @@ void sMQTTClient::processMessage()
 			}
 			if (header[6] != 0x04)
 			{
-				status = 0x1;
+				status = sMQTTConnReturnUnacceptableProtocolVersion;
 				//debug("unknown level");
 				// Level 3.1.1
 			}
@@ -93,9 +93,10 @@ void sMQTTClient::processMessage()
 				}
 
 				if (_parent->isClientConnected(this, clientId) == false)
-					_parent->onConnect(this, username, password);
+					if (_parent->onConnect(this, username, password) == false)
+						status = sMQTTConnReturnBadUsernameOrPassword;
 				else
-					status = 0x02;
+					status = sMQTTConnReturnIdentifierRejected;
 			}
 
 			sMQTTMessage msg(sMQTTMessage::Type::ConnAck);
