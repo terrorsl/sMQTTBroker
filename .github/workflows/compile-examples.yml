@@ -61,6 +61,7 @@ jobs:
             - examples
           enable-deltas-report: true
           sketches-report-path: ${{ env.SKETCHES_REPORTS_PATH }}
+          cli-compile-flags: "-DESP8266"
 
       - name: Save sketches report as workflow artifact
         uses: actions/upload-artifact@v2
