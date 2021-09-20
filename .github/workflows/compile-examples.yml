@@ -58,7 +58,7 @@ jobs:
             # Additional library dependencies can be listed here.
             # See: https://github.com/arduino/compile-sketches#libraries
           cli-compile-flags: |
-            - --build-property: "compiler.cpp.extra_flag=-DESP8266"
+            - --build-property \"compiler.cpp.extra_flag=-DESP8266\"
           sketch-paths: |
             - examples
           enable-deltas-report: true
