@@ -31,7 +31,6 @@ public:
 	const std::string &getClientId() {
 		return clientId;
 	};
-	//bool is
 private:
 	void processMessage();
 	void updateLiveStatus();

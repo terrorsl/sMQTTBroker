@@ -13,8 +13,8 @@ void sMQTTClient::update()
 	if (keepAlive!=0 && aliveMillis > currentMillis)
 	{
 		SMQTT_LOGD("aliveMillis > currentMillis");
-		//_client->stop();
-		break;
+		_client->stop();
+		return;
 	}
 	while (_client->available()>0)
 	{
@@ -124,8 +124,14 @@ void sMQTTClient::processMessage()
 			const char *topicName = payload;
 			topicNameLen = len;
 			payload += len;
+
+			char packeteIdent[2];
 			if (qos)
+			{
+				packeteIdent[0] = payload[0];
+				packeteIdent[1] = payload[1];
 				payload += 2;
+			}
 			len = message.end() - payload;
 
 			sMQTTTopic topic(topicName, topicNameLen, payload, len);
@@ -134,6 +140,14 @@ void sMQTTClient::processMessage()
 			_parent->publish(&topic, &message);
 			if (message.isRetained())
 				_parent->updateRetainedTopic(&topic);
+
+			if (qos==1)
+			{
+				sMQTTMessage msg(sMQTTMessage::Type::PubAck);
+				msg.add(packeteIdent[0]);
+				msg.add(packeteIdent[1]);
+				msg.sendTo(this);
+			}
 		}
 		break;
 	case sMQTTMessage::Type::Subscribe:
