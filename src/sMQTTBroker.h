@@ -23,6 +23,8 @@ public:
 
 	virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password);
 	virtual void onRemove(sMQTTClient*);
+
+	virtual void onPublish(const std::string &topic,const std::string &payload);
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 

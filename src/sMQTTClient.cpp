@@ -10,9 +10,9 @@ void sMQTTClient::update()
 #if defined(ESP8266) || defined(ESP32)
 	currentMillis = millis();
 #endif
-	if (keepAlive!=0 && aliveMillis > currentMillis)
+	if (keepAlive!=0 && aliveMillis < currentMillis)
 	{
-		SMQTT_LOGD("aliveMillis > currentMillis");
+		SMQTT_LOGD("aliveMillis < currentMillis");
 		_client->stop();
 		return;
 	}

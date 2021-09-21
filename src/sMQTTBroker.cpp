@@ -73,6 +73,8 @@ void sMQTTBroker::unsubscribe(sMQTTClient *client, const char *topic)
 };
 void sMQTTBroker::publish(sMQTTTopic *topic, sMQTTMessage *msg)
 {
+	onPublish(std::string(topic->Name()),std::string(topic->Payload()));
+
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -177,4 +179,7 @@ bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, co
 	return true;
 };
 void sMQTTBroker::onRemove(sMQTTClient*) {
+};
+void sMQTTBroker::onPublish(const std::string &topic, const std::string &payload)
+{
 };
