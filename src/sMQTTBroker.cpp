@@ -168,9 +168,12 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client, const std::string &clie
 	{
 		sMQTTClient *c = *clit;
 		if (c == client)
-			continue;
+			return false;
 		if (c->getClientId() == clientId)
+		{
+			SMQTT_LOGD("found:%s", clientId.c_str());
 			return true;
+		}
 	}
 	return false;
 };

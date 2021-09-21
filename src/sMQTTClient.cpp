@@ -100,8 +100,10 @@ void sMQTTClient::processMessage()
 				}
 
 				if (_parent->isClientConnected(this, clientId) == false)
+				{
 					if (_parent->onConnect(this, username, password) == false)
 						status = sMQTTConnReturnBadUsernameOrPassword;
+				}
 				else
 					status = sMQTTConnReturnIdentifierRejected;
 			}
