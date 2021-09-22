@@ -3,6 +3,8 @@
 sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):_parent(parent), mqtt_connected(false)
 {
 	_client = new WiFiClient(*client);
+	keepAlive = 5;
+	updateLiveStatus();
 };
 void sMQTTClient::update()
 {
