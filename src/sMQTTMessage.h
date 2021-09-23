@@ -11,6 +11,24 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
+static const char *debugMessageType[] = {
+	"Unknown",
+	"Connect",
+	"ConnAck",
+	"Publish",
+	"PubAck",
+	"PubRec",
+	"PubRel",
+	"PubComp",
+	"Subscribe",
+	"SubAck",
+	"UnSubscribe",
+	"UnSuback",
+	"PingReq",
+	"PingResp",
+	"Disconnect"
+};
+
 class sMQTTClient;
 class sMQTTMessage
 {
@@ -23,6 +41,8 @@ public:
 		Publish = 0x30,
 		PubAck = 0x40,
 		PubRec = 0x50,
+		PubRel = 0x60,
+		PubComp=0x70,
 		Subscribe = 0x80,
 		SubAck = 0x90,
 		UnSubscribe = 0xA0,
@@ -64,7 +84,7 @@ public:
 		return state == Complete ? static_cast<Type>(buffer[0] & 0XF0) : Unknown;
 	}
 	unsigned char QoS() {
-		return buffer[0] & 0x6;
+		return (buffer[0] & 0x6)>>1;
 	}
 	bool isRetained() {
 		return buffer[0] & 0x1;

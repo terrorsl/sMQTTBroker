@@ -8,16 +8,6 @@ sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):_parent(parent)
 };
 void sMQTTClient::update()
 {
-	unsigned long currentMillis;
-#if defined(ESP8266) || defined(ESP32)
-	currentMillis = millis();
-#endif
-	if (keepAlive!=0 && aliveMillis < currentMillis)
-	{
-		SMQTT_LOGD("aliveMillis < currentMillis");
-		_client->stop();
-		return;
-	}
 	while (_client->available()>0)
 	{
 		message.incoming(_client->read());
@@ -27,6 +17,17 @@ void sMQTTClient::update()
 			message.reset();
 		}
 	}
+	unsigned long currentMillis;
+#if defined(ESP8266) || defined(ESP32)
+	currentMillis = millis();
+#endif
+	if (keepAlive != 0 && aliveMillis < currentMillis)
+	{
+		SMQTT_LOGD("aliveMillis < currentMillis %d", aliveMillis - currentMillis);
+		_client->stop();
+	}
+	//else
+	//	SMQTT_LOGD("time %d", aliveMillis - currentMillis);
 };
 bool sMQTTClient::isConnected()
 {
@@ -38,7 +39,7 @@ void sMQTTClient::write(const char* buf, size_t length)
 }
 void sMQTTClient::processMessage()
 {
-	SMQTT_LOGD("message type:%d", message.type());
+	SMQTT_LOGD("message type:%s(%d)", debugMessageType[message.type()/0x10], message.type());
 
 	const char *header = message.getVHeader();
 	switch (message.type())
@@ -72,6 +73,7 @@ void sMQTTClient::processMessage()
 				payload += len;
 
 				SMQTT_LOGD("message clientId:%s", clientId.c_str());
+				SMQTT_LOGD("message keepTime:%d", keepAlive);
 
 				if (mqtt_flags&sMQTTWillFlag)
 				{
@@ -139,19 +141,41 @@ void sMQTTClient::processMessage()
 			len = message.end() - payload;
 
 			sMQTTTopic topic(topicName, topicNameLen, payload, len);
-			SMQTT_LOGD("message topic:%s payload:%s", topic.Name(), topic.Payload());
+			SMQTT_LOGD("message qos:%d topic:%s payload:%s",qos, topic.Name(), topic.Payload());
+
+			switch (qos)
+			{
+			case 1:
+				{
+					sMQTTMessage msg(sMQTTMessage::Type::PubAck);
+					msg.add(packeteIdent[0]);
+					msg.add(packeteIdent[1]);
+					msg.sendTo(this);
+				}
+				break;
+			case 2:
+				{
+					sMQTTMessage msg(sMQTTMessage::Type::PubRec);
+					msg.add(packeteIdent[0]);
+					msg.add(packeteIdent[1]);
+					msg.sendTo(this);
+				}
+				break;
+			}
 
 			_parent->publish(&topic, &message);
 			if (message.isRetained())
 				_parent->updateRetainedTopic(&topic);
-
-			if (qos==1)
-			{
-				sMQTTMessage msg(sMQTTMessage::Type::PubAck);
-				msg.add(packeteIdent[0]);
-				msg.add(packeteIdent[1]);
-				msg.sendTo(this);
-			}
+		}
+		break;
+	case sMQTTMessage::Type::PubRel:
+		{
+			const char *payload = header;
+			//char packeteIdent[2];
+			sMQTTMessage msg(sMQTTMessage::Type::PubComp);
+			msg.add(payload[0]);
+			msg.add(payload[1]);
+			msg.sendTo(this);
 		}
 		break;
 	case sMQTTMessage::Type::Subscribe:
@@ -222,7 +246,7 @@ void sMQTTClient::updateLiveStatus()
 {
 	if (keepAlive)
 #if defined(ESP8266) || defined(ESP32)
-		aliveMillis = keepAlive * 1000 + millis();
+		aliveMillis = (keepAlive*1.5) * 1000 + millis();
 #endif
 	else
 		aliveMillis = 0;

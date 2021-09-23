@@ -183,6 +183,3 @@ bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, co
 };
 void sMQTTBroker::onRemove(sMQTTClient*) {
 };
-void sMQTTBroker::onPublish(const std::string &topic, const std::string &payload)
-{
-};
