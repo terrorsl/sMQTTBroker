@@ -26,6 +26,11 @@ void sMQTTBroker::update()
 			c->update();
 		else
 		{
+			for (sMQTTTopicList::iterator sub = subscribes.begin(); sub != subscribes.end(); sub++)
+			{
+				(*sub)->unsubscribe(c);
+			}
+
 			delete c;
 			clit=clients.erase(clit);
 			SMQTT_LOGD("Clients %d", clients.size());
@@ -48,7 +53,7 @@ bool sMQTTBroker::subscribe(sMQTTClient *client, const char *topic)
 			return true;
 		}
 	}
-	sMQTTTopic *newTopic = new sMQTTTopic(topic);
+	sMQTTTopic *newTopic = new sMQTTTopic(topic,0);
 	newTopic->subscribe(client);
 	subscribes.push_back(newTopic);
 
@@ -73,17 +78,22 @@ void sMQTTBroker::unsubscribe(sMQTTClient *client, const char *topic)
 };
 void sMQTTBroker::publish(sMQTTTopic *topic, sMQTTMessage *msg)
 {
-	onPublish(std::string(topic->Name()),std::string(topic->Payload()));
+	if(topic->Payload())
+		onPublish(std::string(topic->Name()),std::string(topic->Payload()));
+	else
+		onPublish(std::string(topic->Name()), std::string());
 
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
-		if ((*sub)->match(topic))
+		//if ((*sub)->match(topic))
+		if ((*sub)->match(topic->Name()))
 		{
 			sMQTTClientList subList = (*sub)->getSubscribeList();
+			SMQTT_LOGD("topic %s Clients %d", topic->Name(), subList.size());
 			for (auto cl : subList)
 			{
-				msg->sendTo(cl);
+				msg->sendTo(cl,false);
 			}
 		}
 	}
@@ -91,18 +101,18 @@ void sMQTTBroker::publish(sMQTTTopic *topic, sMQTTMessage *msg)
 bool sMQTTBroker::isTopicValidName(const char *filter)
 {
 	int length = strlen(filter);
-	char *hashpos = strchr(filter, '#');	/* '#' wildcard can be only at the beginning or the end of a topic */
+	const char *hashpos = strchr(filter, '#');	/* '#' wildcard can be only at the beginning or the end of a topic */
 
 	if (hashpos != NULL)
 	{
-		char *second = strchr(hashpos + 1, '#');
+		const char *second = strchr(hashpos + 1, '#');
 		if ((hashpos != filter && hashpos != filter + (length - 1)) || second != NULL)
 			return false;
 	}
 	/* '#' or '+' only next to a slash separator or end of name */
 	for (const char *c = "#+"; *c != '\0'; ++c)
 	{
-		char *pos = strchr(filter, *c);
+		const char *pos = strchr(filter, *c);
 		while (pos != NULL)
 		{
 			if (pos > filter)
@@ -131,33 +141,47 @@ void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 	}
 	if (it != retains.end())
 	{
-		(*it)->update(topic);
+		SMQTT_LOGD("updateRetainedTopic update %s", topic->Name());
+		if (topic->Payload())
+			(*it)->update(topic);
+		else
+		{
+			delete *it;
+			retains.erase(it);
+		}
 	}
 	else
 	{
-		sMQTTTopic *newTopic = new sMQTTTopic(topic);
-		retains.push_back(newTopic);
+		// append only with payload
+		if (topic->Payload())
+		{
+			sMQTTTopic *newTopic = new sMQTTTopic(topic);
+			retains.push_back(newTopic);
+		}
 	}
 };
 void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 {
 	SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
 	sMQTTTopicList::iterator it;
+	int time = 0;
 	for (it = retains.begin(); it != retains.end(); it++)
 	{
-		if (topic->match(*it))
+		//if (topic->match(*it))
+		if (topic->match((*it)->Name()))
 		{
-			SMQTT_LOGD("findRetainTopic %s", topic->Name());
-			sMQTTMessage msg(sMQTTMessage::Type::Publish);
+			SMQTT_LOGD("findRetainTopic %s qos:%d", (*it)->Name(), (*it)->QoS());
+			SMQTT_LOGD("findRetainTopic %s", (*it)->Payload());
+			sMQTTMessage msg(sMQTTMessage::Type::Publish, (*it)->QoS()<<1);
 			msg.add((*it)->Name(), strlen((*it)->Name()));
 			// msg_id
 			if ((*it)->QoS()) {
-				msg.add(0);
-				msg.add(0);
+				msg.add(time>>8);
+				msg.add(time);
+				time++;
 			}
 			msg.add((*it)->Payload(), strlen((*it)->Payload()), false);
 			msg.sendTo(client);
-			break;
 		}
 	}
 };

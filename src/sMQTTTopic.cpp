@@ -1,19 +1,12 @@
 #include<sMQTTBroker.h>
 
-sMQTTTopic::sMQTTTopic(const char *name) :_payload(0), qos(0)
+sMQTTTopic::sMQTTTopic(const char *name, char QoS) :_payload(0), qos(QoS)
 {
-	_nameLen = strlen(name);
-	_name = new char[_nameLen + 1];
-	_name[_nameLen] = 0;
-	memcpy(_name, name, _nameLen);
-	_nameLen += 1;
+	_name = name;
 }
 sMQTTTopic::sMQTTTopic(const char *name, unsigned short nameLen, const char *payload, unsigned short payloadLen) :qos(0)
 {
-	_name = new char[nameLen + 1];
-	_name[nameLen] = 0;
-	_nameLen = nameLen + 1;
-	memcpy(_name, name, nameLen);
+	_name=name;
 
 	_payloadLen = payloadLen;
 	if (payloadLen)
@@ -26,13 +19,24 @@ sMQTTTopic::sMQTTTopic(const char *name, unsigned short nameLen, const char *pay
 	else
 		_payload = 0;
 };
-sMQTTTopic::sMQTTTopic(sMQTTTopic *other) :_name(0), _payload(0)
+sMQTTTopic::sMQTTTopic(std::string &name, std::string &payload, char QoS): qos(QoS)
+{
+	_name = name;
+	if (payload.size())
+	{
+		_payload = new char[payload.size() + 1];
+		_payload[payload.size()] = 0;
+		memcpy(_payload, payload.c_str(), payload.size());
+	}
+	else
+		_payload = 0;
+};
+sMQTTTopic::sMQTTTopic(sMQTTTopic *other) : _payload(0)
 {
 	update(other);
 };
 sMQTTTopic::~sMQTTTopic()
 {
-	delete[] _name;
 	if (_payload)
 		delete[] _payload;
 };
@@ -44,14 +48,16 @@ void sMQTTTopic::subscribe(sMQTTClient *client)
 };
 bool sMQTTTopic::match(sMQTTTopic *other)
 {
-	if (strcmp(_name, other->Name()) == 0)
+#if !defined(WIN32)
+	if (strcmp(_name.c_str(), other->Name()) == 0)
 		return true;
-	if (strcmp(_name, MULTI_LEVEL_WILDCARD) == 0)
+	if (strcmp(_name.c_str(), MULTI_LEVEL_WILDCARD) == 0)
 		return true;
 
 	char *ptr, *savePtr;
 	char *pmatch, *savePtr2, *topic = (char*)other->Name();
-	ptr = strtok_r(_name, TOPIC_LEVEL_SEPARATOR, &savePtr);
+	char *name = (char*)_name.c_str();
+	ptr = strtok_r(name, TOPIC_LEVEL_SEPARATOR, &savePtr);
 	pmatch = strtok_r(topic, TOPIC_LEVEL_SEPARATOR, &savePtr2);
 	while (ptr != NULL)
 	{
@@ -71,5 +77,46 @@ bool sMQTTTopic::match(sMQTTTopic *other)
 	}
 	if (pmatch == NULL && ptr == NULL)
 		return true;
+#endif
+	return false;
+};
+bool sMQTTTopic::match(const std::string &other)
+{
+	if (_name == other)
+		return true;
+	if (_name == MULTI_LEVEL_WILDCARD)
+		return true;
+
+	int first_pos=0,first_end;
+	int second_pos=0,second_end;
+	for (;;)
+	{
+		first_end = _name.find_first_of(TOPIC_LEVEL_SEPARATOR, first_pos);
+		second_end = other.find_first_of(TOPIC_LEVEL_SEPARATOR, second_pos);
+		std::string fsub = _name.substr(first_pos, first_end- first_pos);
+		std::string ssub = other.substr(second_pos, second_end- second_pos);
+		if (fsub == ssub)
+		{
+			if (first_end == std::string::npos && second_end == std::string::npos)
+				return true;
+			else
+			{
+				if (first_end == std::string::npos || second_end == std::string::npos)
+					return false;
+			}
+			first_pos = first_end+1;
+			second_pos = second_end+1;
+			continue;
+		}
+		
+		if (_name.substr(first_pos, first_end- first_pos) == MULTI_LEVEL_WILDCARD)
+			return true;
+		if (_name.substr(first_pos, first_end- first_pos) == SINGLE_LEVEL_WILDCARD)
+		{
+			if (second_end == std::string::npos)
+				return true;
+		}
+		break;
+	}
 	return false;
 };

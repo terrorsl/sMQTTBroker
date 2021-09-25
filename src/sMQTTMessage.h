@@ -89,7 +89,7 @@ public:
 	bool isRetained() {
 		return buffer[0] & 0x1;
 	}
-	sMQTTError sendTo(sMQTTClient *) const;
+	sMQTTError sendTo(sMQTTClient *, bool needRecalc=true);
 	// buff is MSB/LSB/STRING
 	// output buff+=2, len=length(str)
 	static void getString(const char* &buff, unsigned short &len);
@@ -102,9 +102,11 @@ private:
 		size = 0;
 		state = Create;
 	}
-	void encodeLength(char* msb, int length) const;
+	int encodeLength(char* msb, int length) const;
+
 	std::vector<char> buffer;
 	State state;
+	unsigned short multiplyer;
 	unsigned short size;
 	unsigned char vheader;
 };

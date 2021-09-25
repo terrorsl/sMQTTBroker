@@ -2,7 +2,7 @@
 
 sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):_parent(parent), mqtt_connected(false)
 {
-	_client = new WiFiClient(*client);
+	_client = new TCPClient(*client);
 	keepAlive = 5;
 	updateLiveStatus();
 };
@@ -39,7 +39,7 @@ void sMQTTClient::write(const char* buf, size_t length)
 }
 void sMQTTClient::processMessage()
 {
-	SMQTT_LOGD("message type:%s(%d)", debugMessageType[message.type()/0x10], message.type());
+	SMQTT_LOGD("message type:%s(0x%x)", debugMessageType[message.type()/0x10], message.type());
 
 	const char *header = message.getVHeader();
 	switch (message.type())
@@ -123,13 +123,18 @@ void sMQTTClient::processMessage()
 	case sMQTTMessage::Type::Publish:
 		{
 			unsigned char qos = message.QoS();//message.type() & 0x6;
-			unsigned short len, topicNameLen;
+
+			//SMQTT_LOGD("message qos:%d", qos);
+
+			unsigned short len;
 			const char *payload = header;
 			message.getString(payload, len);
 
 			const char *topicName = payload;
-			topicNameLen = len;
+			std::string _topicName(topicName, len);
 			payload += len;
+
+			//SMQTT_LOGD("message topic:%s", _topicName.c_str());
 
 			char packeteIdent[2];
 			if (qos)
@@ -139,9 +144,15 @@ void sMQTTClient::processMessage()
 				payload += 2;
 			}
 			len = message.end() - payload;
+			std::string _payload(payload, len);
+			//SMQTT_LOGD("message payload:%s", _payload.c_str());
 
-			sMQTTTopic topic(topicName, topicNameLen, payload, len);
-			SMQTT_LOGD("message qos:%d topic:%s payload:%s",qos, topic.Name(), topic.Payload());
+			sMQTTTopic topic(_topicName,_payload, qos);
+			if(topic.Payload())
+				SMQTT_LOGD("message qos:%d topic:%s payload:%s",qos, topic.Name(), topic.Payload());
+
+			if (message.isRetained())
+				_parent->updateRetainedTopic(&topic);
 
 			switch (qos)
 			{
@@ -164,8 +175,6 @@ void sMQTTClient::processMessage()
 			}
 
 			_parent->publish(&topic, &message);
-			if (message.isRetained())
-				_parent->updateRetainedTopic(&topic);
 		}
 		break;
 	case sMQTTMessage::Type::PubRel:
@@ -181,26 +190,31 @@ void sMQTTClient::processMessage()
 	case sMQTTMessage::Type::Subscribe:
 		{
 			unsigned short msg_id = (header[0] << 8) | header[1];
-			SMQTT_LOGD("message id:%d", msg_id);
+			//SMQTT_LOGD("message id:%d", msg_id);
 			const char *payload = header + 2;
-			int count = 0;
+			std::vector<char> qoss;
 			while (payload < message.end())
 			{
 				unsigned short len;
 				message.getString(payload, len);	// Topic
 
-				SMQTT_LOGD("message topic:%s", std::string(payload, len).c_str());
-				_parent->subscribe(this, std::string(payload, len).c_str());
-
+				std::string topic(payload, len);
+				SMQTT_LOGD("message topic:%s", topic.c_str());
 				payload += len;
 				unsigned char qos = *payload++;
-				count++;
+
+				if (_parent->subscribe(this, topic.c_str()) == false)
+				{
+					SMQTT_LOGD("subscribe failed");
+					qos = 0x80;
+				}
+				qoss.push_back(qos);
 			}
 			sMQTTMessage msg(sMQTTMessage::Type::SubAck);
 			msg.add(header[0]);
 			msg.add(header[1]);
-			for (int i = 0; i<count; i++)
-				msg.add(0);
+			for (int i = 0; i<qoss.size(); i++)
+				msg.add(qoss[i]);
 			msg.sendTo(this);
 		}
 		break;
@@ -247,6 +261,8 @@ void sMQTTClient::updateLiveStatus()
 	if (keepAlive)
 #if defined(ESP8266) || defined(ESP32)
 		aliveMillis = (keepAlive*1.5) * 1000 + millis();
+#else
+		aliveMillis = 0;
 #endif
 	else
 		aliveMillis = 0;

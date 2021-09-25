@@ -2,6 +2,22 @@
 #define SMQTTPLATFORM_FILE
 
 #if defined(WIN32)
+class TCPClient {
+public:
+	bool available() { return false; };
+	char read() { return 0; }
+	bool connected() {
+		return false;
+	}
+	void stop() {}
+	void write(const char *, int) {}
+};
+class TCPServer {
+public:
+	TCPServer(short) {}
+	void begin() {}
+};
+#define SMQTT_LOGD
 #elif defined(ESP8266)
 #include <ESP8266WiFi.h>
 #if defined(DEBUG_ESP_PORT)
