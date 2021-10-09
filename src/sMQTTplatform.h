@@ -20,6 +20,8 @@ public:
 #define SMQTT_LOGD
 #elif defined(ESP8266)
 #include <ESP8266WiFi.h>
+#define TCPClient WiFiClient
+#define TCPServer WiFiServer
 #if defined(DEBUG_ESP_PORT)
 #define SMQTT_LOGD(...) DEBUG_ESP_PORT.printf(__VA_ARGS__)
 #else
