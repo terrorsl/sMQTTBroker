@@ -114,7 +114,13 @@ bool sMQTTTopic::match(const std::string &other)
 		if (_name.substr(first_pos, first_end- first_pos) == SINGLE_LEVEL_WILDCARD)
 		{
 			if (second_end == std::string::npos)
-				return true;
+			{
+				if (first_end == std::string::npos)
+					return true;
+			}
+			second_pos = second_end + 1;
+			first_pos = first_end + 1;
+			continue;
 		}
 		break;
 	}

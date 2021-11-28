@@ -1,6 +1,6 @@
 #include<sMQTTBroker.h>
 
-sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):_parent(parent), mqtt_connected(false)
+sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):mqtt_connected(false), _parent(parent)
 {
 	_client = new TCPClient(*client);
 	keepAlive = 5;
@@ -221,20 +221,18 @@ void sMQTTClient::processMessage()
 	case sMQTTMessage::Type::UnSubscribe:
 		{
 			unsigned short msg_id = (header[0] << 8) | header[1];
-			SMQTT_LOGD("message id:%d", msg_id);
+			//SMQTT_LOGD("message id:%d", msg_id);
 			const char *payload = header + 2;
-			int count = 0;
 			while (payload < message.end())
 			{
 				unsigned short len;
 				message.getString(payload, len);	// Topic
 
-				SMQTT_LOGD("message topic:%s", std::string(payload, len).c_str());
+				//SMQTT_LOGD("message topic:%s", std::string(payload, len).c_str());
 				_parent->unsubscribe(this, std::string(payload, len).c_str());
 
 				payload += len;
 				unsigned char qos = *payload++;
-				count++;
 			}
 			sMQTTMessage msg(sMQTTMessage::Type::UnSuback);
 			msg.add(header[0]);
