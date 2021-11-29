@@ -26,6 +26,8 @@ void sMQTTBroker::update()
 			c->update();
 		else
 		{
+			onRemove(c);
+
 			for (sMQTTTopicList::iterator sub = subscribes.begin(); sub != subscribes.end(); sub++)
 			{
 				(*sub)->unsubscribe(c);
