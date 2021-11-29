@@ -174,7 +174,7 @@ void sMQTTClient::processMessage()
 				break;
 			}
 
-			_parent->publish(&topic, &message);
+			_parent->publish(this,&topic, &message);
 		}
 		break;
 	case sMQTTMessage::Type::PubRel:
@@ -190,7 +190,7 @@ void sMQTTClient::processMessage()
 	case sMQTTMessage::Type::Subscribe:
 		{
 			unsigned short msg_id = (header[0] << 8) | header[1];
-			//SMQTT_LOGD("message id:%d", msg_id);
+			SMQTT_LOGD("message id:%d", msg_id);
 			const char *payload = header + 2;
 			std::vector<char> qoss;
 			while (payload < message.end())
