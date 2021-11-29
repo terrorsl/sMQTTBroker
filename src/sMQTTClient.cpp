@@ -3,7 +3,7 @@
 sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient *client):mqtt_connected(false), _parent(parent)
 {
 	_client = new TCPClient(*client);
-	keepAlive = 5;
+	keepAlive = 25;
 	updateLiveStatus();
 };
 void sMQTTClient::update()
