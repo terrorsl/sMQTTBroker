@@ -117,7 +117,10 @@ void sMQTTClient::processMessage()
 			msg.add(status); // Connection accepted
 			msg.sendTo(this);
 
-			mqtt_connected = true;
+			if (status)
+				_client->stop();
+			else
+				mqtt_connected = true;
 		}
 		break;
 	case sMQTTMessage::Type::Publish:
@@ -242,6 +245,7 @@ void sMQTTClient::processMessage()
 		break;
 	case sMQTTMessage::Type::Disconnect:
 		{
+			mqtt_connected = false;
 			_client->stop();
 		}
 		break;

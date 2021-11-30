@@ -11,6 +11,9 @@ public:
 	bool init(unsigned short port);
 	void update();
 
+	void publish(const std::string &topic, const std::string &payload);
+
+	// inner function
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
 	bool subscribe(sMQTTClient *client, const char *topic);

@@ -30,7 +30,13 @@ void sMQTTBroker::update()
 
 			for (sMQTTTopicList::iterator sub = subscribes.begin(); sub != subscribes.end(); sub++)
 			{
-				(*sub)->unsubscribe(c);
+				if ((*sub)->unsubscribe(c) == true)
+				{
+					delete *sub;
+					sub= subscribes.erase(sub);
+					if (sub == subscribes.end())
+						break;
+				}
 			}
 
 			delete c;
@@ -208,4 +214,31 @@ bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, co
 	return true;
 };
 void sMQTTBroker::onRemove(sMQTTClient*) {
+};
+void sMQTTBroker::publish(const std::string &topic, const std::string &payload)
+{
+	sMQTTTopicList::iterator sub;
+	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
+	{
+		if ((*sub)->match(topic))
+		{
+			sMQTTClientList subList = (*sub)->getSubscribeList();
+			SMQTT_LOGD("topic %s Clients %d", topic.c_str(), subList.size());
+
+			sMQTTMessage msg(sMQTTMessage::Type::Publish, 0);
+			msg.add(topic.c_str(), topic.size());
+			// msg_id
+			/*if ((*it)->QoS()) {
+				msg.add(time >> 8);
+				msg.add(time);
+				time++;
+			}*/
+			msg.add(payload.c_str(), payload.size(), false);
+			//msg.sendTo(client);
+			for (auto cl : subList)
+			{
+				msg.sendTo(cl);
+			}
+		}
+	}
 };
