@@ -21,7 +21,8 @@ class sMQTTBroker;
 class sMQTTClient
 {
 public:
-	sMQTTClient(sMQTTBroker *parent, TCPClient *client);
+	sMQTTClient(sMQTTBroker *parent, TCPClient &client);
+	~sMQTTClient();
 
 	void update();
 	
@@ -42,7 +43,7 @@ private:
 	unsigned long aliveMillis;
 
 	sMQTTBroker *_parent;
-	TCPClient *_client;
+	TCPClient _client;
 	sMQTTMessage message;
 };
 

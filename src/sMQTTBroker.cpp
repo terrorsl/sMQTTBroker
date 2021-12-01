@@ -15,7 +15,7 @@ void sMQTTBroker::update()
 	if (client)
 	{
 		SMQTT_LOGD("New Client");
-		clients.push_back(new sMQTTClient(this, &client));
+		clients.push_back(new sMQTTClient(this, client));
 	}
 #endif
 	sMQTTClientList::iterator clit;
@@ -170,7 +170,7 @@ void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 };
 void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 {
-	SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
+	//SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
 	sMQTTTopicList::iterator it;
 	int time = 0;
 	for (it = retains.begin(); it != retains.end(); it++)
