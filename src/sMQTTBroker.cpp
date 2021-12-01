@@ -154,6 +154,7 @@ void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 			(*it)->update(topic);
 		else
 		{
+			SMQTT_LOGD("updateRetainedTopic delete %s", topic->Name());
 			delete *it;
 			retains.erase(it);
 		}
@@ -172,7 +173,7 @@ void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 {
 	//SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
 	sMQTTTopicList::iterator it;
-	int time = 0;
+	unsigned long time = 0;
 	for (it = retains.begin(); it != retains.end(); it++)
 	{
 		//if (topic->match(*it))

@@ -28,7 +28,7 @@ void sMQTTClient::update()
 #endif
 	if (keepAlive != 0 && aliveMillis < currentMillis)
 	{
-		SMQTT_LOGD("aliveMillis < currentMillis %d", aliveMillis - currentMillis);
+		SMQTT_LOGD("aliveMillis(%d) < currentMillis(%d)", aliveMillis, currentMillis);
 		_client.stop();
 	}
 	//else
