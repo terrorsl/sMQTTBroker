@@ -144,7 +144,7 @@ void sMQTTClient::processMessage()
 
 			//SMQTT_LOGD("message topic:%s", _topicName.c_str());
 
-			char packeteIdent[2];
+			char packeteIdent[2]={0};
 			if (qos)
 			{
 				packeteIdent[0] = payload[0];
@@ -197,8 +197,10 @@ void sMQTTClient::processMessage()
 		break;
 	case sMQTTMessage::Type::Subscribe:
 		{
+#if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_DEBUG
 			unsigned short msg_id = (header[0] << 8) | header[1];
 			SMQTT_LOGD("message id:%d", msg_id);
+#endif
 			const char *payload = header + 2;
 			std::vector<char> qoss;
 			while (payload < message.end())
@@ -228,7 +230,7 @@ void sMQTTClient::processMessage()
 		break;
 	case sMQTTMessage::Type::UnSubscribe:
 		{
-			unsigned short msg_id = (header[0] << 8) | header[1];
+			//unsigned short msg_id = (header[0] << 8) | header[1];
 			//SMQTT_LOGD("message id:%d", msg_id);
 			const char *payload = header + 2;
 			while (payload < message.end())
@@ -240,7 +242,7 @@ void sMQTTClient::processMessage()
 				_parent->unsubscribe(this, std::string(payload, len).c_str());
 
 				payload += len;
-				unsigned char qos = *payload++;
+				//unsigned char qos = *payload++;
 			}
 			sMQTTMessage msg(sMQTTMessage::Type::UnSuback);
 			msg.add(header[0]);
@@ -258,6 +260,12 @@ void sMQTTClient::processMessage()
 		{
 			sMQTTMessage msg(sMQTTMessage::Type::PingResp);
 			msg.sendTo(this);
+		}
+		break;
+	default:
+		{
+			mqtt_connected = false;
+			_client.stop();
 		}
 		break;
 	}
