@@ -22,7 +22,7 @@ public:
 	bool isTopicValidName(const char *filter);
 	void updateRetainedTopic(sMQTTTopic *topic);
 
-	bool isClientConnected(sMQTTClient *client, const std::string &clientId);
+	bool isClientConnected(sMQTTClient *client);
 
 	virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password);
 	virtual void onRemove(sMQTTClient*);

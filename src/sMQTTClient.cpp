@@ -44,7 +44,10 @@ void sMQTTClient::write(const char* buf, size_t length)
 }
 void sMQTTClient::processMessage()
 {
-	SMQTT_LOGD("message type:%s(0x%x)", debugMessageType[message.type()/0x10], message.type());
+	if (message.type() <= sMQTTMessage::Type::Disconnect)
+	{
+		SMQTT_LOGD("message type:%s(0x%x)", debugMessageType[message.type() / 0x10], message.type());
+	}
 
 	const char *header = message.getVHeader();
 	switch (message.type())
@@ -108,7 +111,7 @@ void sMQTTClient::processMessage()
 					payload += len;
 				}
 
-				if (_parent->isClientConnected(this, clientId) == false)
+				if (_parent->isClientConnected(this) == false)
 				{
 					if (_parent->onConnect(this, username, password) == false)
 						status = sMQTTConnReturnBadUsernameOrPassword;
@@ -130,9 +133,7 @@ void sMQTTClient::processMessage()
 		break;
 	case sMQTTMessage::Type::Publish:
 		{
-			unsigned char qos = message.QoS();//message.type() & 0x6;
-
-			//SMQTT_LOGD("message qos:%d", qos);
+			unsigned char qos = message.QoS();
 
 			unsigned short len;
 			const char *payload = header;
@@ -141,8 +142,6 @@ void sMQTTClient::processMessage()
 			const char *topicName = payload;
 			std::string _topicName(topicName, len);
 			payload += len;
-
-			//SMQTT_LOGD("message topic:%s", _topicName.c_str());
 
 			char packeteIdent[2]={0};
 			if (qos)
@@ -153,11 +152,8 @@ void sMQTTClient::processMessage()
 			}
 			len = message.end() - payload;
 			std::string _payload(payload, len);
-			//SMQTT_LOGD("message payload:%s", _payload.c_str());
 
 			sMQTTTopic topic(_topicName,_payload, qos);
-			if(topic.Payload())
-				SMQTT_LOGD("message qos:%d topic:%s payload:%s",qos, topic.Name(), topic.Payload());
 
 			if (message.isRetained())
 				_parent->updateRetainedTopic(&topic);
@@ -185,10 +181,13 @@ void sMQTTClient::processMessage()
 			_parent->publish(this,&topic, &message);
 		}
 		break;
+	case sMQTTMessage::Type::PubAck:
+		{
+		}
+		break;
 	case sMQTTMessage::Type::PubRel:
 		{
 			const char *payload = header;
-			//char packeteIdent[2];
 			sMQTTMessage msg(sMQTTMessage::Type::PubComp);
 			msg.add(payload[0]);
 			msg.add(payload[1]);
@@ -264,6 +263,7 @@ void sMQTTClient::processMessage()
 		break;
 	default:
 		{
+			SMQTT_LOGD("unknown message", message.type());
 			mqtt_connected = false;
 			_client.stop();
 		}
@@ -275,7 +275,8 @@ void sMQTTClient::updateLiveStatus()
 {
 	if (keepAlive)
 #if defined(ESP8266) || defined(ESP32)
-		aliveMillis = (keepAlive*1.5) * 1000 + millis();
+		//aliveMillis = (keepAlive*1.5) * 1000 + millis();
+		aliveMillis = keepAlive*1500 + millis();
 #else
 		aliveMillis = 0;
 #endif

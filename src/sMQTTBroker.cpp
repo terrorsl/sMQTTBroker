@@ -171,7 +171,6 @@ void sMQTTBroker::updateRetainedTopic(sMQTTTopic *topic)
 };
 void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 {
-	//SMQTT_LOGD("findRetainTopic %s %d", topic->Name(), retains.size());
 	sMQTTTopicList::iterator it;
 	unsigned long time = 0;
 	for (it = retains.begin(); it != retains.end(); it++)
@@ -194,7 +193,7 @@ void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 		}
 	}
 };
-bool sMQTTBroker::isClientConnected(sMQTTClient *client, const std::string &clientId)
+bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 {
 	sMQTTClientList::iterator clit;
 	for (clit = clients.begin(); clit != clients.end(); clit++)
@@ -202,9 +201,9 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client, const std::string &clie
 		sMQTTClient *c = *clit;
 		if (c == client)
 			return false;
-		if (c->getClientId() == clientId)
+		if (c->getClientId() == client->getClientId())
 		{
-			SMQTT_LOGD("found:%s", clientId.c_str());
+			SMQTT_LOGD("found:%s client size:%d", client->getClientId(), clients.size());
 			return true;
 		}
 	}
