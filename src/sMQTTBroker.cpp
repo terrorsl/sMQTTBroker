@@ -215,8 +215,9 @@ bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, co
 };
 void sMQTTBroker::onRemove(sMQTTClient*) {
 };
-void sMQTTBroker::publish(const std::string &topic, const std::string &payload)
+void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
+	int time = 0;
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -225,20 +226,28 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload)
 			sMQTTClientList subList = (*sub)->getSubscribeList();
 			SMQTT_LOGD("topic %s Clients %d", topic.c_str(), subList.size());
 
-			sMQTTMessage msg(sMQTTMessage::Type::Publish, 0);
+			sMQTTMessage msg(sMQTTMessage::Type::Publish, qos<<1);
 			msg.add(topic.c_str(), topic.size());
 			// msg_id
-			/*if ((*it)->QoS()) {
+			if (qos) {
 				msg.add(time >> 8);
 				msg.add(time);
 				time++;
-			}*/
+			}
 			msg.add(payload.c_str(), payload.size(), false);
 			//msg.sendTo(client);
 			for (auto cl : subList)
 			{
 				msg.sendTo(cl);
 			}
+		}
+	}
+	if (retain)
+	{
+		if (payload.empty() == false)
+		{
+			sMQTTTopic Topic((std::string&)topic, (std::string&)payload, qos);
+			updateRetainedTopic(&Topic);
 		}
 	}
 };
