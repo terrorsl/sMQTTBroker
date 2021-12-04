@@ -20,6 +20,7 @@ void sMQTTClient::update()
 		{
 			processMessage();
 			message.reset();
+			break;
 		}
 	}
 	unsigned long currentMillis;

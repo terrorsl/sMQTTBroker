@@ -11,7 +11,7 @@ public:
 	void onRemove(sMQTTClient*)
     {
     };
-    void onPublish(const std::string &topic, const std::string &payload)
+    void onPublish(sMQTTClient *client,const std::string &topic, const std::string &payload)
     {
         // client publish a message to the topic
         // you can parse the message, save it to a database, or whatever, based on your goals
