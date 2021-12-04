@@ -50,10 +50,10 @@ void loop(){
 
 * [x] Client Identifier
 * [ ] DUP
-* [ ] keep alive
+* [x] keep alive
 * [x] user/password
-* [ ] append support Qos 1
-* [ ] PUBACK
+* [x] append support Qos 1
+* [x] PUBACK
 * [ ] PUBREC
 * [ ] PUBREL
 * [ ] PUBCOMP
