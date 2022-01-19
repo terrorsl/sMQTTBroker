@@ -16,6 +16,23 @@ public:
         // client publish a message to the topic
         // you can parse the message, save it to a database, or whatever, based on your goals
     }
+    bool onEvent(sMQTTEvent *event)
+    {
+        switch(event->Type())
+        {
+        case NewClient_sMQTTEventType:
+            {
+                sMQTTNewClientEvent *e=(sMQTTNewClientEvent*)event;
+                e->Login();
+                e->Password();
+            }
+            break;
+        case LostConnect_sMQTTEventType:
+            WiFi.reconnect();
+            break;
+        }
+        return true;
+    }
 };
 
 MyBroker broker;

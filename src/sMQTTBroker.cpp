@@ -11,11 +11,18 @@ bool sMQTTBroker::init(unsigned short port)
 void sMQTTBroker::update()
 {
 #if defined(ESP8266) || defined(ESP32)
+	if (WiFi.isConnected() == false)
+	{
+		sMQTTLostConnectionEvent event;
+		onEvent(&event);
+		return;
+	}
 	WiFiClient client = _server->available();
 	if (client)
 	{
 		SMQTT_LOGD("New Client");
-		clients.push_back(new sMQTTClient(this, client));
+		sMQTTClient *sClient = new sMQTTClient(this, client);
+		clients.push_back(sClient);
 	}
 #endif
 	sMQTTClientList::iterator clit;
@@ -27,6 +34,9 @@ void sMQTTBroker::update()
 		else
 		{
 			onRemove(c);
+
+			sMQTTRemoveClientEvent event(c);
+			onEvent(&event);
 
 			for (sMQTTTopicList::iterator sub = subscribes.begin(); sub != subscribes.end(); sub++)
 			{
@@ -208,12 +218,6 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 		}
 	}
 	return false;
-};
-bool sMQTTBroker::onConnect(sMQTTClient *client, const std::string &username, const std::string &password) {
-	// do nothing here
-	return true;
-};
-void sMQTTBroker::onRemove(sMQTTClient*) {
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {

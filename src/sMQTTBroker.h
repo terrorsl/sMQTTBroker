@@ -4,6 +4,7 @@
 #include"sMQTTplatform.h"
 #include"sMQTTClient.h"
 #include"sMQTTTopic.h"
+#include"sMQTTEvent.h"
 
 class sMQTTBroker
 {
@@ -24,10 +25,12 @@ public:
 
 	bool isClientConnected(sMQTTClient *client);
 
-	virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password);
-	virtual void onRemove(sMQTTClient*);
+	
+	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
+	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
+	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
 
-	virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
+	virtual bool onEvent(sMQTTEvent *event) { return true; }
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 

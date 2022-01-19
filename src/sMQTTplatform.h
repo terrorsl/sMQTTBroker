@@ -1,6 +1,8 @@
 #ifndef SMQTTPLATFORM_FILE
 #define SMQTTPLATFORM_FILE
 
+#define SMQTT_DEPRECATED(msg) [[deprecated(msg)]]
+
 #if defined(WIN32)
 class TCPClient {
 public:
