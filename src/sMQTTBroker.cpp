@@ -255,3 +255,8 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 		}
 	}
 };
+void sMQTTBroker::restart()
+{
+	_server->end();
+	_server->begin();
+};

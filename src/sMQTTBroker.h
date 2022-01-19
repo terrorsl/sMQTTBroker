@@ -14,6 +14,8 @@ public:
 
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 
+	void restart();
+
 	// inner function
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
