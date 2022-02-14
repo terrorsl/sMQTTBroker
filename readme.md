@@ -59,5 +59,7 @@ void loop(){
 * [ ] PUBCOMP
 * [ ] append support MQTT 5.0
 
+<a href="https://www.buymeacoffee.com/terror85a"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=terror85a&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+
 ## License
 [![GitHub](https://img.shields.io/github/license/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE)
