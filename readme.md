@@ -19,9 +19,10 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 
 ## Quickstart
 
-* install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/sMQTTBroker.svg?)](https://www.ardu-badge.com/sMQTTBroker)
+<!-- * install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
   (you can use the Arduino library manager and search for sMQTTBroker)
-* ~~make sMQTTConfig.h~~
+* ~~make sMQTTConfig.h~~ -->
 
 ```c++
 #include<sMQTTBroker.h>
