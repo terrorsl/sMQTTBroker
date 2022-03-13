@@ -19,9 +19,12 @@ Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQT
 
 ## Quickstart
 
-* install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/sMQTTBroker.svg?)](https://www.ardu-badge.com/sMQTTBroker)
+
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/terrorsl/library/sMQTTBroker.svg)](https://registry.platformio.org/libraries/terrorsl/sMQTTBroker)
+<!-- * install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
   (you can use the Arduino library manager and search for sMQTTBroker)
-* ~~make sMQTTConfig.h~~
+* ~~make sMQTTConfig.h~~ -->
 
 ```c++
 #include<sMQTTBroker.h>
@@ -58,6 +61,8 @@ void loop(){
 * [ ] PUBREL
 * [ ] PUBCOMP
 * [ ] append support MQTT 5.0
+
+<a href="https://www.buymeacoffee.com/terror85a"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=terror85a&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
 
 ## License
 [![GitHub](https://img.shields.io/github/license/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE)
