@@ -257,6 +257,10 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 };
 void sMQTTBroker::restart()
 {
+#if defined(ESP8266)
+	_server->stop();
+#else
 	_server->end();
+#endif
 	_server->begin();
 };
