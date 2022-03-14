@@ -1,27 +1,34 @@
 # sMQTTBroker
 
-Simple MQTT Broker is light and fast mqtt broker for ESP32, ESP8266
+Simple MQTT Broker
 
-Stable release [![Release](https://img.shields.io/github/v/release/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/releases/latest)
+sMQTTBroker is light and fast mqtt broker
+
+## Stable release
+
+[![Release](https://img.shields.io/github/v/release/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/releases/latest)
 ![GitHub Release Date](https://img.shields.io/github/release-date/terrorsl/sMQTTBroker)
 ![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/terrorsl/sMQTTBroker/latest)
 ![GitHub all releases](https://img.shields.io/github/downloads/terrorsl/sMQTTBroker/total)
-
-[![Esp8266](https://img.shields.io/badge/platform-ESP8266-green)](https://www.espressif.com/en/products/socs/esp8266)
-[![Esp32](https://img.shields.io/badge/platform-ESP32-green)](https://www.espressif.com/en/products/socs/esp32)
-[![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
-
 [![Check Arduino](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml/badge.svg?branch=main)](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml)
 
+## Platform:
+[![Esp8266](https://img.shields.io/badge/platform-ESP8266-green)](https://www.espressif.com/en/products/socs/esp8266)
+[![Esp32](https://img.shields.io/badge/platform-ESP32-green)](https://www.espressif.com/en/products/socs/esp32)
+
+## Documentation:
+[![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
+
+## IDE
+
+[![arduino-library-badge](https://www.ardu-badge.com/badge/sMQTTBroker.svg?)](https://www.ardu-badge.com/sMQTTBroker)
+
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/terrorsl/library/sMQTTBroker.svg)](https://registry.platformio.org/libraries/terrorsl/sMQTTBroker)
 ## Features
 
 - Mqtt 3.1.1 / Qos 0 supported
 
 ## Quickstart
-
-[![arduino-library-badge](https://www.ardu-badge.com/badge/sMQTTBroker.svg?)](https://www.ardu-badge.com/sMQTTBroker)
-
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/terrorsl/library/sMQTTBroker.svg)](https://registry.platformio.org/libraries/terrorsl/sMQTTBroker)
 <!-- * install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
   (you can use the Arduino library manager and search for sMQTTBroker)
 * ~~make sMQTTConfig.h~~ -->
