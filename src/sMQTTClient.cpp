@@ -88,9 +88,11 @@ void sMQTTClient::processMessage()
 				{
 					//topic
 					message.getString(payload, len);
+					//willTopic = std::string(payload, len);
 					payload += len;
 					//message
 					message.getString(payload, len);
+					//willMessage = std::string(payload, len);
 					payload += len;
 				}
 				std::string username;

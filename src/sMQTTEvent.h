@@ -50,4 +50,17 @@ class sMQTTLostConnectionEvent :public sMQTTEvent
 public:
 	sMQTTLostConnectionEvent();
 };
+class sMQTTPublicClientEvent:public sMQTTEvent
+{
+public:
+	sMQTTPublicClientEvent(sMQTTClient *client,const std::string &topic);
+	void setPayload(const std::string &payload);
+	sMQTTClient *Client();
+	std::string Topic();
+	std::string Payload();
+private:
+	sMQTTClient *_client;
+	std::string _topic;
+	std::string _payload;
+};
 #endif

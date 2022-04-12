@@ -96,10 +96,16 @@ void sMQTTBroker::unsubscribe(sMQTTClient *client, const char *topic)
 };
 void sMQTTBroker::publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg)
 {
+	sMQTTPublicClientEvent event(client,std::string(topic->Name()));
 	if(topic->Payload())
+	{
 		onPublish(client,std::string(topic->Name()),std::string(topic->Payload()));
+		event.setPayload(std::string(topic->Payload()));
+	}
 	else
 		onPublish(client,std::string(topic->Name()), std::string());
+
+	onEvent(&event);
 
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)

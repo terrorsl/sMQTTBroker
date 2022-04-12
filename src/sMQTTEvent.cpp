@@ -19,3 +19,23 @@ sMQTTClient *sMQTTRemoveClientEvent::Client()
 sMQTTLostConnectionEvent::sMQTTLostConnectionEvent() :sMQTTEvent(LostConnect_sMQTTEventType)
 {
 };
+sMQTTPublicClientEvent::sMQTTPublicClientEvent(sMQTTClient *client,const std::string &topic):
+sMQTTEvent(Public_sMQTTEventType),_client(client),_topic(topic)
+{
+};
+void sMQTTPublicClientEvent::setPayload(const std::string &payload)
+{
+	_payload=payload;
+};
+sMQTTClient *sMQTTPublicClientEvent::Client()
+{
+	return _client;
+};
+std::string sMQTTPublicClientEvent::Topic()
+{
+	return _topic;
+};
+std::string sMQTTPublicClientEvent::Payload()
+{
+	return _payload;
+};
