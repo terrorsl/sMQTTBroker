@@ -11,12 +11,14 @@ bool sMQTTBroker::init(unsigned short port)
 void sMQTTBroker::update()
 {
 #if defined(ESP8266) || defined(ESP32)
+#if !defined(SMQTT_WT32_ETH01)
 	if (WiFi.isConnected() == false)
 	{
 		sMQTTLostConnectionEvent event;
 		onEvent(&event);
 		return;
 	}
+#endif
 	WiFiClient client = _server->available();
 	if (client)
 	{

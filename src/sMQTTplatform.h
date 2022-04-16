@@ -30,7 +30,10 @@ public:
 #define SMQTT_LOGD(...)
 #endif
 #elif defined(ESP32)
-#include<WiFi.h>
+#include <WiFi.h>
+#ifdef SMQTT_WT32_ETH01
+#include <ETH.h>
+#endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
 static const char *SMQTTTAG = "sMQTTBroker";
