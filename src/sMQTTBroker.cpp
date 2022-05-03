@@ -1,7 +1,8 @@
 #include"sMQTTBroker.h"
 
-bool sMQTTBroker::init(unsigned short port)
+bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
 {
+	isCheckWifiConnection=checkWifiConnection;
 	_server = new TCPServer(port);
 	if (_server == 0)
 		return false;
@@ -11,14 +12,15 @@ bool sMQTTBroker::init(unsigned short port)
 void sMQTTBroker::update()
 {
 #if defined(ESP8266) || defined(ESP32)
-#if !defined(SMQTT_WT32_ETH01)
-	if (WiFi.isConnected() == false)
+	if(isCheckWifiConnection)
 	{
-		sMQTTLostConnectionEvent event;
-		onEvent(&event);
-		return;
+		if (WiFi.isConnected() == false)
+		{
+			sMQTTLostConnectionEvent event;
+			onEvent(&event);
+			return;
+		}
 	}
-#endif
 	WiFiClient client = _server->available();
 	if (client)
 	{

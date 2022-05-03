@@ -9,7 +9,7 @@
 class sMQTTBroker
 {
 public:
-	bool init(unsigned short port);
+	bool init(unsigned short port, bool checkWifiConnection=false);
 	void update();
 
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
@@ -39,5 +39,6 @@ private:
 	TCPServer *_server;
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
+	bool isCheckWifiConnection;
 };
 #endif
