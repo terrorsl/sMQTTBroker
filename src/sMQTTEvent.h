@@ -8,7 +8,9 @@ enum sMQTTEventType
 	NewClient_sMQTTEventType,
 	RemoveClient_sMQTTEventType,
 	Public_sMQTTEventType,
-	LostConnect_sMQTTEventType
+	LostConnect_sMQTTEventType,
+	Subscribe_sMQTTEventType,
+	UnSubscribe_sMQTTEventType
 };
 class sMQTTEvent
 {
@@ -62,5 +64,15 @@ private:
 	sMQTTClient *_client;
 	std::string _topic;
 	std::string _payload;
+};
+class sMQTTSubUnSubClientEvent:public sMQTTEvent
+{
+public:
+	sMQTTSubUnSubClientEvent(unsigned char type,sMQTTClient *client,const std::string &topic);
+	sMQTTClient *Client();
+	std::string Topic();
+private:
+	sMQTTClient *_client;
+	std::string _topic;
 };
 #endif

@@ -39,3 +39,17 @@ std::string sMQTTPublicClientEvent::Payload()
 {
 	return _payload;
 };
+sMQTTSubUnSubClientEvent::sMQTTSubUnSubClientEvent(unsigned char type,sMQTTClient *client,const std::string &topic):
+sMQTTEvent(type)
+{
+	_client=client;
+	_topic=topic;
+};
+sMQTTClient *sMQTTSubUnSubClientEvent::Client()
+{
+	return _client;
+};
+std::string sMQTTSubUnSubClientEvent::Topic()
+{
+	return _topic;
+};

@@ -30,6 +30,12 @@ public:
         case LostConnect_sMQTTEventType:
             WiFi.reconnect();
             break;
+        case UnSubscribe_sMQTTEventType:
+        case Subscribe_sMQTTEventType:
+            {
+                sMQTTSubUnSubClientEvent *e=(sMQTTNewClientEvent*)event;
+            }
+            break;
         }
         return true;
     }

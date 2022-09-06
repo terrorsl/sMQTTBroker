@@ -65,6 +65,10 @@ bool sMQTTBroker::subscribe(sMQTTClient *client, const char *topic)
 {
 	if (isTopicValidName(topic) == false)
 		return false;
+
+	sMQTTSubUnSubClientEvent event(Subscribe_sMQTTEventType, client, topic);
+	onEvent(&event);
+
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -84,6 +88,9 @@ bool sMQTTBroker::subscribe(sMQTTClient *client, const char *topic)
 };
 void sMQTTBroker::unsubscribe(sMQTTClient *client, const char *topic)
 {
+	sMQTTSubUnSubClientEvent event(UnSubscribe_sMQTTEventType, client, topic);
+	onEvent(&event);
+
 	sMQTTTopicList::iterator it;
 	for (it = subscribes.begin(); it != subscribes.end(); it++)
 	{
