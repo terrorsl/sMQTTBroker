@@ -9,7 +9,7 @@ sMQTTBroker is light and fast mqtt broker
 [![Release](https://img.shields.io/github/v/release/terrorsl/sMQTTBroker)](https://github.com/terrorsl/sMQTTBroker/releases/latest)
 ![GitHub Release Date](https://img.shields.io/github/release-date/terrorsl/sMQTTBroker)
 ![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/terrorsl/sMQTTBroker/latest)
-![GitHub all releases](https://img.shields.io/github/downloads/terrorsl/sMQTTBroker/total)
+![GitHub release (latest by date)](https://img.shields.io/github/downloads/terrorsl/sMQTTBroker/latest/total)
 [![Check Arduino](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml/badge.svg?branch=main)](https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml)
 
 ## Platform:
@@ -26,7 +26,7 @@ sMQTTBroker is light and fast mqtt broker
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/terrorsl/library/sMQTTBroker.svg)](https://registry.platformio.org/libraries/terrorsl/sMQTTBroker)
 ## Features
 
-- Mqtt 3.1.1 / Qos 0 supported
+- Mqtt 3.1.1 / Qos 0, 1 supported
 
 ## Quickstart
 <!-- * install [sMQTTBroker library](https://github.com/terrorsl/sMQTTBroker)
