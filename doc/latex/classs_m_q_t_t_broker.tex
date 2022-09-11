@@ -1,0 +1,57 @@
+\hypertarget{classs_m_q_t_t_broker}{}\doxysection{s\+M\+Q\+T\+T\+Broker Class Reference}
+\label{classs_m_q_t_t_broker}\index{sMQTTBroker@{sMQTTBroker}}
+
+
+{\ttfamily \#include $<$s\+M\+Q\+T\+T\+Broker.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a57cc44e1043a375ab7d2e6c87ab6bf00}\label{classs_m_q_t_t_broker_a57cc44e1043a375ab7d2e6c87ab6bf00}} 
+bool \mbox{\hyperlink{classs_m_q_t_t_broker_a57cc44e1043a375ab7d2e6c87ab6bf00}{init}} (unsigned short port, bool check\+Wifi\+Connection=false)
+\begin{DoxyCompactList}\small\item\em setup broker \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_aed4dbbbd5522b17321ada92865693bfa}\label{classs_m_q_t_t_broker_aed4dbbbd5522b17321ada92865693bfa}} 
+void \mbox{\hyperlink{classs_m_q_t_t_broker_aed4dbbbd5522b17321ada92865693bfa}{update}} ()
+\begin{DoxyCompactList}\small\item\em call in loop function \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a1ac9b1d999900dd2b0f56f4a2108ca36}\label{classs_m_q_t_t_broker_a1ac9b1d999900dd2b0f56f4a2108ca36}} 
+void \mbox{\hyperlink{classs_m_q_t_t_broker_a1ac9b1d999900dd2b0f56f4a2108ca36}{publish}} (const std\+::string \&topic, const std\+::string \&payload, unsigned char qos=0, bool retain=false)
+\begin{DoxyCompactList}\small\item\em publish message \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a3485afb8697f9fc3f415a8fca35717ee}\label{classs_m_q_t_t_broker_a3485afb8697f9fc3f415a8fca35717ee}} 
+void \mbox{\hyperlink{classs_m_q_t_t_broker_a3485afb8697f9fc3f415a8fca35717ee}{restart}} ()
+\begin{DoxyCompactList}\small\item\em restart W\+I\+FI server \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}\label{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}} 
+virtual bool \mbox{\hyperlink{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}{on\+Event}} (\mbox{\hyperlink{classs_m_q_t_t_event}{s\+M\+Q\+T\+T\+Event}} $\ast$event)
+\begin{DoxyCompactList}\small\item\em receive event from broker \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a5d49b292c961097014c3b02a66d644f2}\label{classs_m_q_t_t_broker_a5d49b292c961097014c3b02a66d644f2}} 
+{\bfseries S\+M\+Q\+T\+T\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED} (\char`\"{}on\+Connect is deprecated, use \mbox{\hyperlink{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}{on\+Event}}\char`\"{}) virtual bool on\+Connect(\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$client
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a6f23ca461ee6cd53e2914f3a8bd197c5}\label{classs_m_q_t_t_broker_a6f23ca461ee6cd53e2914f3a8bd197c5}} 
+{\bfseries S\+M\+Q\+T\+T\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED} (\char`\"{}on\+Remove is deprecated, use \mbox{\hyperlink{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}{on\+Event}}\char`\"{}) virtual void on\+Remove(\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a2130aa6c19df234d11c9f06740b02484}\label{classs_m_q_t_t_broker_a2130aa6c19df234d11c9f06740b02484}} 
+{\bfseries S\+M\+Q\+T\+T\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED} (\char`\"{}on\+Publish is deprecated, use \mbox{\hyperlink{classs_m_q_t_t_broker_a6bbb70ab720d3157da5e3a3da5f02abb}{on\+Event}}\char`\"{}) virtual void on\+Publish(\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$client
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_acc22744622659c3b0eaf1b1e106176cc}\label{classs_m_q_t_t_broker_acc22744622659c3b0eaf1b1e106176cc}} 
+const std\+::string \& {\bfseries username}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a46b88b125ba28be6e8f4bb82eb472b44}\label{classs_m_q_t_t_broker_a46b88b125ba28be6e8f4bb82eb472b44}} 
+const std\+::string const std\+::string \& {\bfseries password} \{ return true
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a51a04ae8d2a1b1150b8a92b9b8ad3249}\label{classs_m_q_t_t_broker_a51a04ae8d2a1b1150b8a92b9b8ad3249}} 
+const std\+::string \& {\bfseries topic}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_broker_a91bcdc6f16a2c8039c4a28b6dd5aa0d0}\label{classs_m_q_t_t_broker_a91bcdc6f16a2c8039c4a28b6dd5aa0d0}} 
+const std\+::string const std\+::string \& {\bfseries payload} \{\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main class 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/s\+M\+Q\+T\+T\+Broker.\+h\item 
+src/s\+M\+Q\+T\+T\+Broker.\+cpp\end{DoxyCompactItemize}

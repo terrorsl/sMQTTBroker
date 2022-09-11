@@ -1,3 +1,6 @@
+/*!
+Main class
+*/
 #ifndef SMQTTBROKER_FILE
 #define SMQTTBROKER_FILE
 
@@ -9,13 +12,21 @@
 class sMQTTBroker
 {
 public:
+	//! setup broker
 	bool init(unsigned short port, bool checkWifiConnection=false);
+	//! call in loop function
 	void update();
-
+	//! publish message
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
-
+	//! restart WIFI server
 	void restart();
+	//! receive event from broker
+	virtual bool onEvent(sMQTTEvent *event) { return true; }
 
+	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
+	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
+	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
+private:
 	// inner function
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
@@ -26,13 +37,6 @@ public:
 	void updateRetainedTopic(sMQTTTopic *topic);
 
 	bool isClientConnected(sMQTTClient *client);
-
-	
-	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
-	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
-	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
-
-	virtual bool onEvent(sMQTTEvent *event) { return true; }
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 

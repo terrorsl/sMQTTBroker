@@ -3,14 +3,15 @@
 
 #include<string>
 
+/*! Enum for event*/
 enum sMQTTEventType
 {
-	NewClient_sMQTTEventType,
-	RemoveClient_sMQTTEventType,
-	Public_sMQTTEventType,
-	LostConnect_sMQTTEventType,
-	Subscribe_sMQTTEventType,
-	UnSubscribe_sMQTTEventType
+	NewClient_sMQTTEventType,//< event when new client connect
+	RemoveClient_sMQTTEventType,//< client disconnect
+	Public_sMQTTEventType,//< some client publish message
+	LostConnect_sMQTTEventType,//< broker lost connection
+	Subscribe_sMQTTEventType,//< client subscribe to topic
+	UnSubscribe_sMQTTEventType//< client unsubscribe from topic
 };
 class sMQTTEvent
 {
@@ -24,14 +25,18 @@ protected:
 	unsigned char _type;
 };
 class sMQTTClient;
+/*! Connect new client event*/
 class sMQTTNewClientEvent :public sMQTTEvent
 {
 public:
 	sMQTTNewClientEvent(sMQTTClient *,std::string &,std::string &);
+	/*! get connected client */
 	sMQTTClient *Client();
+	/*! get client login*/
 	std::string Login() {
 		return login;
 	};
+	/*! get client password*/
 	std::string Password() {
 		return password;
 	};

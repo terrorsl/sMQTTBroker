@@ -1,0 +1,66 @@
+\label{index_md_readme}%
+\Hypertarget{index_md_readme}%
+ Simple M\+Q\+TT Broker
+
+\mbox{\hyperlink{classs_m_q_t_t_broker}{s\+M\+Q\+T\+T\+Broker}} is light and fast mqtt broker\hypertarget{index_autotoc_md1}{}\doxysection{Stable release}\label{index_autotoc_md1}
+\href{https://github.com/terrorsl/sMQTTBroker/releases/latest}{\texttt{ }}    \href{https://github.com/terrorsl/sMQTTBroker/actions/workflows/checkarduino.yml}{\texttt{ }}\hypertarget{index_autotoc_md2}{}\doxysection{Platform\+:}\label{index_autotoc_md2}
+\href{https://www.espressif.com/en/products/socs/esp8266}{\texttt{ }} \href{https://www.espressif.com/en/products/socs/esp32}{\texttt{ }}\hypertarget{index_autotoc_md3}{}\doxysection{Documentation\+:}\label{index_autotoc_md3}
+\href{https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html\#_Toc442180822}{\texttt{ }}\hypertarget{index_autotoc_md4}{}\doxysection{I\+DE}\label{index_autotoc_md4}
+\href{https://www.ardu-badge.com/sMQTTBroker}{\texttt{ }}
+
+\href{https://registry.platformio.org/libraries/terrorsl/sMQTTBroker}{\texttt{ }} \hypertarget{index_autotoc_md5}{}\doxysection{Features}\label{index_autotoc_md5}
+
+\begin{DoxyItemize}
+\item Mqtt 3.\+1.\+1 / Qos 0 supported
+\end{DoxyItemize}\hypertarget{index_autotoc_md6}{}\doxysection{Quickstart}\label{index_autotoc_md6}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{\#include<sMQTTBroker.h>}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{sMQTTBroker broker;}
+\DoxyCodeLine{\#define PORT 1883}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{void setup()\{}
+\DoxyCodeLine{  broker.init(PORT);}
+\DoxyCodeLine{\};}
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{void loop()\{}
+\DoxyCodeLine{  broker.update();}
+\DoxyCodeLine{\};}
+\end{DoxyCode}
+\hypertarget{index_autotoc_md7}{}\doxysection{Examples}\label{index_autotoc_md7}
+\href{https://github.com/terrorsl/sMQTTBroker/examples/simplebroker}{\texttt{ Simple\+Broker}}
+
+\href{https://github.com/terrorsl/sMQTTBroker/examples/simplebroker}{\texttt{ Advance\+Broker}}\hypertarget{index_autotoc_md8}{}\doxysection{T\+O\+DO}\label{index_autotoc_md8}
+
+\begin{DoxyItemize}
+\item \mbox{[}x\mbox{]} Client Identifier
+\item \mbox{[} \mbox{]} D\+UP
+\item \mbox{[}x\mbox{]} keep alive
+\item \mbox{[}x\mbox{]} user/password
+\item \mbox{[}x\mbox{]} append support Qos 1
+\item \mbox{[}x\mbox{]} P\+U\+B\+A\+CK
+\item \mbox{[} \mbox{]} P\+U\+B\+R\+EC
+\item \mbox{[} \mbox{]} P\+U\+B\+R\+EL
+\item \mbox{[} \mbox{]} P\+U\+B\+C\+O\+MP
+\item \mbox{[} \mbox{]} append support M\+Q\+TT 5.\+0
+\end{DoxyItemize}
+
+\href{https://www.buymeacoffee.com/terror85a}{\texttt{ }}\hypertarget{index_autotoc_md9}{}\doxysection{License}\label{index_autotoc_md9}
+\href{https://github.com/terrorsl/sMQTTBroker/blob/main/LICENSE}{\texttt{ }} 

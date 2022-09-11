@@ -1,0 +1,90 @@
+\hypertarget{classs_m_q_t_t_message}{}\doxysection{s\+M\+Q\+T\+T\+Message Class Reference}
+\label{classs_m_q_t_t_message}\index{sMQTTMessage@{sMQTTMessage}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_aab5a97fd24d0b6644f255fb1c40e4b38}\label{classs_m_q_t_t_message_aab5a97fd24d0b6644f255fb1c40e4b38}} 
+enum {\bfseries Type} \{ \newline
+{\bfseries Unknown} = 0, 
+{\bfseries Connect} = 0x10, 
+{\bfseries Conn\+Ack} = 0x20, 
+{\bfseries Publish} = 0x30, 
+\newline
+{\bfseries Pub\+Ack} = 0x40, 
+{\bfseries Pub\+Rec} = 0x50, 
+{\bfseries Pub\+Rel} = 0x60, 
+{\bfseries Pub\+Comp} =0x70, 
+\newline
+{\bfseries Subscribe} = 0x80, 
+{\bfseries Sub\+Ack} = 0x90, 
+{\bfseries Un\+Subscribe} = 0x\+A0, 
+{\bfseries Un\+Suback} = 0x\+B0, 
+\newline
+{\bfseries Ping\+Req} = 0x\+C0, 
+{\bfseries Ping\+Resp} = 0x\+D0, 
+{\bfseries Disconnect} = 0x\+E0
+ \}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a9c6fd91ceb78cbcc81ff84f2b9d31e47}\label{classs_m_q_t_t_message_a9c6fd91ceb78cbcc81ff84f2b9d31e47}} 
+enum {\bfseries State} \{ \newline
+{\bfseries Fixed\+Header} = 0, 
+{\bfseries Length} = 1, 
+{\bfseries Variable\+Header} = 2, 
+{\bfseries Pay\+Load} = 3, 
+\newline
+{\bfseries Complete} = 4, 
+{\bfseries Error} = 5, 
+{\bfseries Create} = 6
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_af73a53e0f21f31db7cb1e97745603744}\label{classs_m_q_t_t_message_af73a53e0f21f31db7cb1e97745603744}} 
+{\bfseries s\+M\+Q\+T\+T\+Message} (Type t, unsigned char bits\+\_\+d3\+\_\+d0=0)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a6099b152f6846d11218d0facb84b4e6f}\label{classs_m_q_t_t_message_a6099b152f6846d11218d0facb84b4e6f}} 
+void {\bfseries incoming} (char byte)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a80d5eba6849d2e6ba3b4d7f2b95e833c}\label{classs_m_q_t_t_message_a80d5eba6849d2e6ba3b4d7f2b95e833c}} 
+void {\bfseries add} (char byte)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a8fa1a0d4f4403a09810b2449f91b2ac7}\label{classs_m_q_t_t_message_a8fa1a0d4f4403a09810b2449f91b2ac7}} 
+void {\bfseries add} (const char $\ast$p, size\+\_\+t len, bool add\+Length=true)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_af323411bd0abd03589f71281d0c202da}\label{classs_m_q_t_t_message_af323411bd0abd03589f71281d0c202da}} 
+void {\bfseries add} (const std\+::string \&str)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_ab55a631f51a0d171b2dd36acaf1853a1}\label{classs_m_q_t_t_message_ab55a631f51a0d171b2dd36acaf1853a1}} 
+const char $\ast$ {\bfseries end} () const
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a96f02955d77a5dfdb7b6107234f41a7b}\label{classs_m_q_t_t_message_a96f02955d77a5dfdb7b6107234f41a7b}} 
+const char $\ast$ {\bfseries get\+V\+Header} () const
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a7592913d9cd47a9663c2b327a5c71903}\label{classs_m_q_t_t_message_a7592913d9cd47a9663c2b327a5c71903}} 
+void {\bfseries reset} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a5238f93ca0266876c5990f40e6c63e91}\label{classs_m_q_t_t_message_a5238f93ca0266876c5990f40e6c63e91}} 
+Type {\bfseries type} () const
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a2f850b447edd4fb8a08051c3f9ba1d66}\label{classs_m_q_t_t_message_a2f850b447edd4fb8a08051c3f9ba1d66}} 
+unsigned char {\bfseries QoS} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a54025f38ca88ddc59199c6cc74fd48e4}\label{classs_m_q_t_t_message_a54025f38ca88ddc59199c6cc74fd48e4}} 
+bool {\bfseries is\+Retained} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_ab67338399753d17232144a2a141fc964}\label{classs_m_q_t_t_message_ab67338399753d17232144a2a141fc964}} 
+s\+M\+Q\+T\+T\+Error {\bfseries send\+To} (\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$, bool need\+Recalc=true)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_message_a847e7407a41d94f24c4bf836761566c3}\label{classs_m_q_t_t_message_a847e7407a41d94f24c4bf836761566c3}} 
+static void {\bfseries get\+String} (const char $\ast$\&buff, unsigned short \&len)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/s\+M\+Q\+T\+T\+Message.\+h\item 
+src/s\+M\+Q\+T\+T\+Message.\+cpp\end{DoxyCompactItemize}

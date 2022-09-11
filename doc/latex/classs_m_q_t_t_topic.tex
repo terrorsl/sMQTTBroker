@@ -1,0 +1,74 @@
+\hypertarget{classs_m_q_t_t_topic}{}\doxysection{s\+M\+Q\+T\+T\+Topic Class Reference}
+\label{classs_m_q_t_t_topic}\index{sMQTTTopic@{sMQTTTopic}}
+Inheritance diagram for s\+M\+Q\+T\+T\+Topic\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classs_m_q_t_t_topic}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_afa3b0fc4b8b921b5dc959b0631e50fe1}\label{classs_m_q_t_t_topic_afa3b0fc4b8b921b5dc959b0631e50fe1}} 
+{\bfseries s\+M\+Q\+T\+T\+Topic} (const char $\ast$name, char QoS=0)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_adfec449ef7d3d001dbfede71070484c3}\label{classs_m_q_t_t_topic_adfec449ef7d3d001dbfede71070484c3}} 
+{\bfseries s\+M\+Q\+T\+T\+Topic} (const char $\ast$name, unsigned short name\+Len, const char $\ast$payload, unsigned short payload\+Len)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a408165023549b8f78523e5430983bb2b}\label{classs_m_q_t_t_topic_a408165023549b8f78523e5430983bb2b}} 
+{\bfseries s\+M\+Q\+T\+T\+Topic} (std\+::string \&name, std\+::string \&payload, char QoS=0)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_abff4a863845bf5aa07bdf431cbd6bc04}\label{classs_m_q_t_t_topic_abff4a863845bf5aa07bdf431cbd6bc04}} 
+{\bfseries s\+M\+Q\+T\+T\+Topic} (\mbox{\hyperlink{classs_m_q_t_t_topic}{s\+M\+Q\+T\+T\+Topic}} $\ast$other)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a3a6098a5f34ad8279f2903ec720b995c}\label{classs_m_q_t_t_topic_a3a6098a5f34ad8279f2903ec720b995c}} 
+void {\bfseries update} (\mbox{\hyperlink{classs_m_q_t_t_topic}{s\+M\+Q\+T\+T\+Topic}} $\ast$other)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a1efff302cb50f412877c1d4ef458401b}\label{classs_m_q_t_t_topic_a1efff302cb50f412877c1d4ef458401b}} 
+const char $\ast$ {\bfseries Name} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_af4eb6065daac9b4f5e125603171058a4}\label{classs_m_q_t_t_topic_af4eb6065daac9b4f5e125603171058a4}} 
+const char $\ast$ {\bfseries Payload} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_abe401322103028e0ea0ee1617fecac8a}\label{classs_m_q_t_t_topic_abe401322103028e0ea0ee1617fecac8a}} 
+const unsigned char {\bfseries QoS} ()
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a9769098e4ec857c0596bfa20b643ec9d}\label{classs_m_q_t_t_topic_a9769098e4ec857c0596bfa20b643ec9d}} 
+bool {\bfseries match} (\mbox{\hyperlink{classs_m_q_t_t_topic}{s\+M\+Q\+T\+T\+Topic}} $\ast$other)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a4269715051423446b8ab868f91e36920}\label{classs_m_q_t_t_topic_a4269715051423446b8ab868f91e36920}} 
+bool {\bfseries match} (const std\+::string \&other)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a03bcbba27c1cfd47631d1c65ef0092c4}\label{classs_m_q_t_t_topic_a03bcbba27c1cfd47631d1c65ef0092c4}} 
+void {\bfseries subscribe} (\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$client)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a1fe6e11bfed7ed52e7bb792ad7dc9cac}\label{classs_m_q_t_t_topic_a1fe6e11bfed7ed52e7bb792ad7dc9cac}} 
+bool {\bfseries unsubscribe} (\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$client)
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a77918b8fca22ff1213de8a2b7c3ded05}\label{classs_m_q_t_t_topic_a77918b8fca22ff1213de8a2b7c3ded05}} 
+const s\+M\+Q\+T\+T\+Client\+List {\bfseries get\+Subscribe\+List} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_aa99173b5a4ef980cb6f17937144d8eff}\label{classs_m_q_t_t_topic_aa99173b5a4ef980cb6f17937144d8eff}} 
+std\+::string {\bfseries \+\_\+name}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_adbd14728d2ecee90ecf4a1af2f1f77c9}\label{classs_m_q_t_t_topic_adbd14728d2ecee90ecf4a1af2f1f77c9}} 
+char $\ast$ {\bfseries \+\_\+payload}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_acb700c763e1de9c090079051d5de69e5}\label{classs_m_q_t_t_topic_acb700c763e1de9c090079051d5de69e5}} 
+unsigned char {\bfseries qos}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a0116ba34b51b0d5383abd3823c337fc1}\label{classs_m_q_t_t_topic_a0116ba34b51b0d5383abd3823c337fc1}} 
+unsigned short {\bfseries \+\_\+payload\+Len}
+\item 
+\mbox{\Hypertarget{classs_m_q_t_t_topic_a2d6c50b3c0be20b6bd7ede540aeeb8a1}\label{classs_m_q_t_t_topic_a2d6c50b3c0be20b6bd7ede540aeeb8a1}} 
+s\+M\+Q\+T\+T\+Client\+List {\bfseries clients}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/s\+M\+Q\+T\+T\+Topic.\+h\item 
+src/s\+M\+Q\+T\+T\+Topic.\+cpp\end{DoxyCompactItemize}

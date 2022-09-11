@@ -3,20 +3,7 @@
 class MyBroker:public sMQTTBroker
 {
 public:
-    bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password)
-    {
-        // check username and password, if ok return true
-        return true;
-    };
-	void onRemove(sMQTTClient*)
-    {
-    };
-    void onPublish(sMQTTClient *client,const std::string &topic, const std::string &payload)
-    {
-        // client publish a message to the topic
-        // you can parse the message, save it to a database, or whatever, based on your goals
-    }
-    bool onEvent(sMQTTEvent *event)
+    bool onEvent(sMQTTEvent *event) override
     {
         switch(event->Type())
         {

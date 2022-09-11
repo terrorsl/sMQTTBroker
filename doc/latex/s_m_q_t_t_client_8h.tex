@@ -1,0 +1,108 @@
+\hypertarget{s_m_q_t_t_client_8h}{}\doxysection{src/s\+M\+Q\+T\+T\+Client.h File Reference}
+\label{s_m_q_t_t_client_8h}\index{src/sMQTTClient.h@{src/sMQTTClient.h}}
+{\ttfamily \#include $<$s\+M\+Q\+T\+T\+Message.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_af27484771f742692f279713a1ceddf62}{s\+M\+Q\+T\+T\+User\+Name\+Flag}}~0x80
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a65d78ea52d249343b49e030adacef2ff}{s\+M\+Q\+T\+T\+Password\+Flag}}~0x40
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_abaee75a253c2444cdcd92610394c8b5d}{s\+M\+Q\+T\+T\+Will\+Retain\+Flag}}~0x20
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_ac66ac3b0efe694d4c87400c1354b5bca}{s\+M\+Q\+T\+T\+Will\+Qo\+S\+Flag}}~0x18
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a6ee4962bb3e45a7ebcf236c716d95a93}{s\+M\+Q\+T\+T\+Will\+Flag}}~0x4
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_ad1defd00b024efdd2f741fad2f140e9c}{s\+M\+Q\+T\+T\+Conn\+Return\+Accepted}}~0x0
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a3459fb66d138ae7b9ecbfa37098c961e}{s\+M\+Q\+T\+T\+Conn\+Return\+Unacceptable\+Protocol\+Version}}~0x1
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a78fab355ee02b7d74fdfd752c15f6077}{s\+M\+Q\+T\+T\+Conn\+Return\+Identifier\+Rejected}}~0x2
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a2306b1589d100ca79ffb85252dff14fd}{s\+M\+Q\+T\+T\+Conn\+Return\+Server\+Unavailable}}~0x3
+\item 
+\#define \mbox{\hyperlink{s_m_q_t_t_client_8h_a57e29313575b6ab36fa7b398cdface80}{s\+M\+Q\+T\+T\+Conn\+Return\+Bad\+Username\+Or\+Password}}~0x4
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::vector$<$ \mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}} $\ast$ $>$ \mbox{\hyperlink{s_m_q_t_t_client_8h_ae331b5e51a2d1e49519aa60a782c9e0f}{s\+M\+Q\+T\+T\+Client\+List}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_ad1defd00b024efdd2f741fad2f140e9c}\label{s_m_q_t_t_client_8h_ad1defd00b024efdd2f741fad2f140e9c}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTConnReturnAccepted@{sMQTTConnReturnAccepted}}
+\index{sMQTTConnReturnAccepted@{sMQTTConnReturnAccepted}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTConnReturnAccepted}{sMQTTConnReturnAccepted}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Conn\+Return\+Accepted~0x0}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a57e29313575b6ab36fa7b398cdface80}\label{s_m_q_t_t_client_8h_a57e29313575b6ab36fa7b398cdface80}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTConnReturnBadUsernameOrPassword@{sMQTTConnReturnBadUsernameOrPassword}}
+\index{sMQTTConnReturnBadUsernameOrPassword@{sMQTTConnReturnBadUsernameOrPassword}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTConnReturnBadUsernameOrPassword}{sMQTTConnReturnBadUsernameOrPassword}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Conn\+Return\+Bad\+Username\+Or\+Password~0x4}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a78fab355ee02b7d74fdfd752c15f6077}\label{s_m_q_t_t_client_8h_a78fab355ee02b7d74fdfd752c15f6077}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTConnReturnIdentifierRejected@{sMQTTConnReturnIdentifierRejected}}
+\index{sMQTTConnReturnIdentifierRejected@{sMQTTConnReturnIdentifierRejected}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTConnReturnIdentifierRejected}{sMQTTConnReturnIdentifierRejected}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Conn\+Return\+Identifier\+Rejected~0x2}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a2306b1589d100ca79ffb85252dff14fd}\label{s_m_q_t_t_client_8h_a2306b1589d100ca79ffb85252dff14fd}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTConnReturnServerUnavailable@{sMQTTConnReturnServerUnavailable}}
+\index{sMQTTConnReturnServerUnavailable@{sMQTTConnReturnServerUnavailable}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTConnReturnServerUnavailable}{sMQTTConnReturnServerUnavailable}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Conn\+Return\+Server\+Unavailable~0x3}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a3459fb66d138ae7b9ecbfa37098c961e}\label{s_m_q_t_t_client_8h_a3459fb66d138ae7b9ecbfa37098c961e}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTConnReturnUnacceptableProtocolVersion@{sMQTTConnReturnUnacceptableProtocolVersion}}
+\index{sMQTTConnReturnUnacceptableProtocolVersion@{sMQTTConnReturnUnacceptableProtocolVersion}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTConnReturnUnacceptableProtocolVersion}{sMQTTConnReturnUnacceptableProtocolVersion}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Conn\+Return\+Unacceptable\+Protocol\+Version~0x1}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a65d78ea52d249343b49e030adacef2ff}\label{s_m_q_t_t_client_8h_a65d78ea52d249343b49e030adacef2ff}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTPasswordFlag@{sMQTTPasswordFlag}}
+\index{sMQTTPasswordFlag@{sMQTTPasswordFlag}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTPasswordFlag}{sMQTTPasswordFlag}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Password\+Flag~0x40}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_af27484771f742692f279713a1ceddf62}\label{s_m_q_t_t_client_8h_af27484771f742692f279713a1ceddf62}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTUserNameFlag@{sMQTTUserNameFlag}}
+\index{sMQTTUserNameFlag@{sMQTTUserNameFlag}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTUserNameFlag}{sMQTTUserNameFlag}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+User\+Name\+Flag~0x80}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_a6ee4962bb3e45a7ebcf236c716d95a93}\label{s_m_q_t_t_client_8h_a6ee4962bb3e45a7ebcf236c716d95a93}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTWillFlag@{sMQTTWillFlag}}
+\index{sMQTTWillFlag@{sMQTTWillFlag}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTWillFlag}{sMQTTWillFlag}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Will\+Flag~0x4}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_ac66ac3b0efe694d4c87400c1354b5bca}\label{s_m_q_t_t_client_8h_ac66ac3b0efe694d4c87400c1354b5bca}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTWillQoSFlag@{sMQTTWillQoSFlag}}
+\index{sMQTTWillQoSFlag@{sMQTTWillQoSFlag}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTWillQoSFlag}{sMQTTWillQoSFlag}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Will\+Qo\+S\+Flag~0x18}
+
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_abaee75a253c2444cdcd92610394c8b5d}\label{s_m_q_t_t_client_8h_abaee75a253c2444cdcd92610394c8b5d}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTWillRetainFlag@{sMQTTWillRetainFlag}}
+\index{sMQTTWillRetainFlag@{sMQTTWillRetainFlag}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTWillRetainFlag}{sMQTTWillRetainFlag}}
+{\footnotesize\ttfamily \#define s\+M\+Q\+T\+T\+Will\+Retain\+Flag~0x20}
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{s_m_q_t_t_client_8h_ae331b5e51a2d1e49519aa60a782c9e0f}\label{s_m_q_t_t_client_8h_ae331b5e51a2d1e49519aa60a782c9e0f}} 
+\index{sMQTTClient.h@{sMQTTClient.h}!sMQTTClientList@{sMQTTClientList}}
+\index{sMQTTClientList@{sMQTTClientList}!sMQTTClient.h@{sMQTTClient.h}}
+\doxysubsubsection{\texorpdfstring{sMQTTClientList}{sMQTTClientList}}
+{\footnotesize\ttfamily typedef std\+::vector$<$\mbox{\hyperlink{classs_m_q_t_t_client}{s\+M\+Q\+T\+T\+Client}}$\ast$$>$ \mbox{\hyperlink{s_m_q_t_t_client_8h_ae331b5e51a2d1e49519aa60a782c9e0f}{s\+M\+Q\+T\+T\+Client\+List}}}
+
