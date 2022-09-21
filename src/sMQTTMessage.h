@@ -49,7 +49,9 @@ public:
 		UnSuback = 0xB0,
 		PingReq = 0xC0,
 		PingResp = 0xD0,
-		Disconnect = 0xE0
+		Disconnect = 0xE0,
+		// version 5 only
+		AUTH = 0xF0
 	};
 	enum State
 	{

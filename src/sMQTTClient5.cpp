@@ -1,51 +1,8 @@
 #include<sMQTTBroker.h>
 
-sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient &client):mqtt_connected(false), _parent(parent)
+void sMQTTClient5::processMessage()
 {
-	_client = client;
-	keepAlive = 25;
-	updateLiveStatus();
-};
-sMQTTClient::~sMQTTClient()
-{
-	//SMQTT_LOGD("free _client");
-	//delete _client;
-};
-void sMQTTClient::update()
-{
-	while (_client.available()>0)
-	{
-		message.incoming(_client.read());
-		if (message.type())
-		{
-			processMessage();
-			message.reset();
-			break;
-		}
-	}
-	unsigned long currentMillis;
-#if defined(ESP8266) || defined(ESP32)
-	currentMillis = millis();
-#endif
-	if (keepAlive != 0 && aliveMillis < currentMillis)
-	{
-		SMQTT_LOGD("aliveMillis(%d) < currentMillis(%d)", aliveMillis, currentMillis);
-		_client.stop();
-	}
-	//else
-	//	SMQTT_LOGD("time %d", aliveMillis - currentMillis);
-};
-bool sMQTTClient::isConnected()
-{
-	return _client.connected();
-};
-void sMQTTClient::write(const char* buf, size_t length)
-{
-	_client.write(buf, length);
-}
-void sMQTTClient::processMessage()
-{
-	if (message.type() <= sMQTTMessage::Type::Disconnect)
+    if (message.type() <= sMQTTMessage::Type::Disconnect)
 	{
 		SMQTT_LOGD("message type:%s(0x%x)", debugMessageType[message.type() / 0x10], message.type());
 	}
@@ -63,11 +20,11 @@ void sMQTTClient::processMessage()
 			unsigned char status = 0;
 			if (strncmp("MQTT", header + 2, 4))
 			{
-				//TODO: close connection
+				status = sMQTTConnReturn5UnsupportedProtocolVersion;
 			}
-			if (header[6] != 0x04)
+			if (header[6] != 0x05)
 			{
-				status = sMQTTConnReturnUnacceptableProtocolVersion;
+				status = sMQTTConnReturn5UnsupportedProtocolVersion;
 				// Level 3.1.1
 			}
 			else
@@ -274,16 +231,4 @@ void sMQTTClient::processMessage()
 		break;
 	}
 	updateLiveStatus();
-};
-void sMQTTClient::updateLiveStatus()
-{
-	if (keepAlive)
-#if defined(ESP8266) || defined(ESP32)
-		//aliveMillis = (keepAlive*1.5) * 1000 + millis();
-		aliveMillis = keepAlive*1500 + millis();
-#else
-		aliveMillis = 0;
-#endif
-	else
-		aliveMillis = 0;
 };

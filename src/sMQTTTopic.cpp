@@ -87,8 +87,8 @@ bool sMQTTTopic::match(const std::string &other)
 	if (_name == MULTI_LEVEL_WILDCARD)
 		return true;
 
-	int first_pos=0,first_end;
-	int second_pos=0,second_end;
+	unsigned int first_pos=0,first_end;
+	unsigned int second_pos=0,second_end;
 	for (;;)
 	{
 		first_end = _name.find_first_of(TOPIC_LEVEL_SEPARATOR, first_pos);
