@@ -1,7 +1,7 @@
 #ifndef SMQTTCLIENT_FILE
 #define SMQTTCLIENT_FILE
 
-#include<sMQTTMessage.h>
+#include"sMQTTMessage.h"
 
 class sMQTTBroker;
 
@@ -56,6 +56,7 @@ public:
 	const std::string &getClientId() {
 		return clientId;
 	};
+	void sendWillMessage();
 	virtual void processMessage()=0;
 protected:
 	void updateLiveStatus();
@@ -65,6 +66,7 @@ protected:
 	std::string clientId;
 	unsigned short keepAlive;
 	unsigned long aliveMillis;
+	std::string willTopic, willMessage;
 
 	sMQTTBroker *_parent;
 	TCPClient _client;

@@ -46,11 +46,11 @@ void sMQTTClient3::processMessage()
 				{
 					//topic
 					message.getString(payload, len);
-					//willTopic = std::string(payload, len);
+					willTopic = std::string(payload, len);
 					payload += len;
 					//message
 					message.getString(payload, len);
-					//willMessage = std::string(payload, len);
+					willMessage = std::string(payload, len);
 					payload += len;
 				}
 				std::string username;
@@ -214,6 +214,8 @@ void sMQTTClient3::processMessage()
 	case sMQTTMessage::Type::Disconnect:
 		{
 			mqtt_connected = false;
+            willTopic.clear();
+            willMessage.clear();
 			_client.stop();
 		}
 		break;

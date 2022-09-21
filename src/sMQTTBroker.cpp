@@ -2,17 +2,17 @@
 
 sMQTTBroker::sMQTTBroker(unsigned char _version):version(_version)
 {
+};
+bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
+{
 	switch(version)
 	{
 	case 3:
 	case 5:
 		break;
-	//default:
-	//	throw "unknown version";
+	default:
+		return false;
 	}
-};
-bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
-{
 	isCheckWifiConnection=checkWifiConnection;
 	_server = new TCPServer(port);
 	if (_server == 0)
@@ -57,6 +57,8 @@ void sMQTTBroker::update()
 			c->update();
 		else
 		{
+			c->sendWillMessage();
+			
 			sMQTTRemoveClientEvent event(c);
 			onEvent(&event);
 
