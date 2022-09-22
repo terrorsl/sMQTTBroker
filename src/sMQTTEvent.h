@@ -13,25 +13,28 @@ enum sMQTTEventType
 	Subscribe_sMQTTEventType,//< client subscribe to topic
 	UnSubscribe_sMQTTEventType//< client unsubscribe from topic
 };
+class sMQTTClient;
 class sMQTTEvent
 {
 public:
-	sMQTTEvent(unsigned char type) :_type(type) {};
+	sMQTTEvent(unsigned char type, sMQTTClient *cl) :_type(type),_client(cl) {};
 
 	unsigned char Type() {
 		return _type;
 	}
+	/*! get client
+	\retval sMQTTClient
+	*/
+	sMQTTClient *Client();
 protected:
 	unsigned char _type;
+	sMQTTClient *_client;
 };
-class sMQTTClient;
 /*! Connect new client event*/
 class sMQTTNewClientEvent :public sMQTTEvent
 {
 public:
 	sMQTTNewClientEvent(sMQTTClient *,std::string &,std::string &);
-	/*! get connected client */
-	sMQTTClient *Client();
 	/*! get client login*/
 	std::string Login() {
 		return login;
@@ -41,43 +44,40 @@ public:
 		return password;
 	};
 private:
-	sMQTTClient *_client;
 	std::string login, password;
 };
+/*! Remove client event*/
 class sMQTTRemoveClientEvent:public sMQTTEvent
 {
 public:
 	sMQTTRemoveClientEvent(sMQTTClient *);
-	sMQTTClient *Client();
-private:
-	sMQTTClient *_client;
 };
+/*! Broker lost connection event*/
 class sMQTTLostConnectionEvent :public sMQTTEvent
 {
 public:
 	sMQTTLostConnectionEvent();
 };
+/*! Client publish messsage event*/
 class sMQTTPublicClientEvent:public sMQTTEvent
 {
 public:
 	sMQTTPublicClientEvent(sMQTTClient *client,const std::string &topic);
 	void setPayload(const std::string &payload);
-	sMQTTClient *Client();
 	std::string Topic();
 	std::string Payload();
 private:
-	sMQTTClient *_client;
 	std::string _topic;
 	std::string _payload;
 };
+/*! Client subscribe/unsubscribe event*/
 class sMQTTSubUnSubClientEvent:public sMQTTEvent
 {
 public:
 	sMQTTSubUnSubClientEvent(unsigned char type,sMQTTClient *client,const std::string &topic);
-	sMQTTClient *Client();
+	/*! Get topic name*/
 	std::string Topic();
 private:
-	sMQTTClient *_client;
 	std::string _topic;
 };
 #endif

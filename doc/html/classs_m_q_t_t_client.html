@@ -65,28 +65,73 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classs_m_q_t_t_client-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">sMQTTClient Class Reference</div>  </div>
+<div class="title">sMQTTClient Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="s_m_q_t_t_client_8h_source.html">sMQTTClient.h</a>&gt;</code></p>
+
+<p>Inherited by sMQTTClient3, and sMQTTClient5.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a400cb6bf31649e055e0f97b237e32d39"><td class="memItemLeft" align="right" valign="top"><a id="a400cb6bf31649e055e0f97b237e32d39"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b> (<a class="el" href="classs_m_q_t_t_broker.html">sMQTTBroker</a> *parent, TCPClient &amp;client)</td></tr>
-<tr class="separator:a400cb6bf31649e055e0f97b237e32d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d26073bdbbb7e70a93c8dc594b7e16e"><td class="memItemLeft" align="right" valign="top"><a id="a0d26073bdbbb7e70a93c8dc594b7e16e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
-<tr class="separator:a0d26073bdbbb7e70a93c8dc594b7e16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26bee7b407384f28dcd6ed1292140226"><td class="memItemLeft" align="right" valign="top"><a id="a26bee7b407384f28dcd6ed1292140226"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isConnected</b> ()</td></tr>
+<tr class="memitem:a26bee7b407384f28dcd6ed1292140226"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_client.html#a26bee7b407384f28dcd6ed1292140226">isConnected</a> ()</td></tr>
 <tr class="separator:a26bee7b407384f28dcd6ed1292140226"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dc9d68ed66ebe0a74752a1119dd83db"><td class="memItemLeft" align="right" valign="top"><a id="a0dc9d68ed66ebe0a74752a1119dd83db"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const char *buf, size_t length)</td></tr>
-<tr class="separator:a0dc9d68ed66ebe0a74752a1119dd83db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84d426d615a752556ab86656000ba1dd"><td class="memItemLeft" align="right" valign="top"><a id="a84d426d615a752556ab86656000ba1dd"></a>
-const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getClientId</b> ()</td></tr>
+<tr class="memitem:a84d426d615a752556ab86656000ba1dd"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_client.html#a84d426d615a752556ab86656000ba1dd">getClientId</a> ()</td></tr>
 <tr class="separator:a84d426d615a752556ab86656000ba1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Client </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a84d426d615a752556ab86656000ba1dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84d426d615a752556ab86656000ba1dd">&#9670;&nbsp;</a></span>getClientId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string&amp; sMQTTClient::getClientId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get client ID </p><dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">clientId</td><td>unique client ID </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a26bee7b407384f28dcd6ed1292140226"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26bee7b407384f28dcd6ed1292140226">&#9670;&nbsp;</a></span>isConnected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool sMQTTClient::isConnected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Connection status </p><dl class="section return"><dt>Returns</dt><dd>True if connected or False </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="s_m_q_t_t_client_8h_source.html">sMQTTClient.h</a></li>
 <li>src/sMQTTClient.cpp</li>

@@ -42,6 +42,7 @@ class sMQTTBroker;
 #define sMQTTConnReturn5ServerMoved 0x9D //Server moved The Client should permanently use another server.
 #define sMQTTConnReturn5ConnectionRateExceeded 0x9F //Connection rate exceeded The connection rate limit has been exceeded.
 
+/*! Client*/
 class sMQTTClient
 {
 public:
@@ -49,10 +50,15 @@ public:
 	virtual ~sMQTTClient();
 
 	void update();
-	
+	/*! Connection status
+	\return True if connected or False 
+	*/
 	bool isConnected();
 	void write(const char* buf, size_t length);
 
+	/*! Get client ID
+	\retval clientId unique client ID
+	*/
 	const std::string &getClientId() {
 		return clientId;
 	};

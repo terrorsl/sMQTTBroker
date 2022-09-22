@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['match_142',['match',['../classs_m_q_t_t_topic.html#a9769098e4ec857c0596bfa20b643ec9d',1,'sMQTTTopic::match(sMQTTTopic *other)'],['../classs_m_q_t_t_topic.html#a4269715051423446b8ab868f91e36920',1,'sMQTTTopic::match(const std::string &amp;other)']]]
+  ['topic_36',['Topic',['../classs_m_q_t_t_sub_un_sub_client_event.html#a9b14c630ee2272b732d3ab6454327c4c',1,'sMQTTSubUnSubClientEvent']]]
 ];
