@@ -36,7 +36,7 @@ public:
 #endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
-static const char *SMQTTTAG = "sMQTTBroker";
+//static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
 #else
 #error "unknown platform"

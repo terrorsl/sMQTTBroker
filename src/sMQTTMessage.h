@@ -11,23 +11,23 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
-static const char *debugMessageType[] = {
-	"Unknown",
-	"Connect",
-	"ConnAck",
-	"Publish",
-	"PubAck",
-	"PubRec",
-	"PubRel",
-	"PubComp",
-	"Subscribe",
-	"SubAck",
-	"UnSubscribe",
-	"UnSuback",
-	"PingReq",
-	"PingResp",
-	"Disconnect"
-};
+//static const char *debugMessageType[] = {
+//	"Unknown",
+//	"Connect",
+//	"ConnAck",
+//	"Publish",
+//	"PubAck",
+//	"PubRec",
+//	"PubRel",
+//	"PubComp",
+//	"Subscribe",
+//	"SubAck",
+//	"UnSubscribe",
+//	"UnSuback",
+//	"PingReq",
+//	"PingResp",
+//	"Disconnect"
+//};
 
 class sMQTTClient;
 class sMQTTMessage
