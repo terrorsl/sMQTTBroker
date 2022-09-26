@@ -26,17 +26,17 @@ public:
 	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
 	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
 	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
-private:
-	// inner function
+	bool isClientConnected(sMQTTClient *client);
+	void updateRetainedTopic(sMQTTTopic *topic);
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
-
 	bool subscribe(sMQTTClient *client, const char *topic);
 	void unsubscribe(sMQTTClient *client, const char *topic);
+private:
+	// inner function
+
 
 	bool isTopicValidName(const char *filter);
-	void updateRetainedTopic(sMQTTTopic *topic);
 
-	bool isClientConnected(sMQTTClient *client);
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
