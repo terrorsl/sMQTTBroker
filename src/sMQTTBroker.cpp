@@ -11,7 +11,6 @@ bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
 };
 void sMQTTBroker::update()
 {
-#if defined(ESP8266) || defined(ESP32)
 	if(isCheckWifiConnection)
 	{
 		if (WiFi.isConnected() == false)
@@ -28,7 +27,6 @@ void sMQTTBroker::update()
 		sMQTTClient *sClient = new sMQTTClient(this, client);
 		clients.push_back(sClient);
 	}
-#endif
 	sMQTTClientList::iterator clit;
 	for (clit = clients.begin(); clit != clients.end(); clit++)
 	{
