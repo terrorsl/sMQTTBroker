@@ -11,6 +11,7 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
+#if defined(DEBUG_ESP_PORT) || defined(CORE_DEBUG_LEVEL)
 static const char *debugMessageType[] = {
 	"Unknown",
 	"Connect",
@@ -28,6 +29,7 @@ static const char *debugMessageType[] = {
 	"PingResp",
 	"Disconnect"
 };
+#endif
 
 class sMQTTClient;
 class sMQTTMessage
@@ -95,6 +97,11 @@ public:
 	// buff is MSB/LSB/STRING
 	// output buff+=2, len=length(str)
 	static void getString(const char* &buff, unsigned short &len);
+
+	const char *decodeLength(const char *msg, unsigned long &size);
+
+	const char *get(const char *msg, unsigned long &value);
+	const char *get(const char *msg, unsigned short &value);
 private:
 	void create(Type type)
 	{

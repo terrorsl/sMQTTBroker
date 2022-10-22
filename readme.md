@@ -18,7 +18,7 @@ sMQTTBroker is light and fast mqtt broker
 
 ## Documentation:
 [![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
-[![Mqtt 5](https://img.shields.io/badge/Mqtt-%5-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+[![Mqtt 5.0](https://img.shields.io/badge/Mqtt-%205.0-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
 
 ## IDE
 

@@ -33,7 +33,71 @@ void sMQTTClient5::processMessage()
 				mqtt_flags = header[7];
 				keepAlive = (header[8] << 8) | header[9];
 
-				const char *payload = &header[10];
+				unsigned long propertySize;
+				const char *property=message.decodeLength(&header[10],propertySize);
+				if(propertySize)
+				{
+					if(*property==0x11)
+					{
+						property++;
+						unsigned long sessionExpireSec;
+						property=message.get(property,sessionExpireSec);
+					}
+					if(*property==0x21)
+					{
+						property++;
+						unsigned short sizeLimit;
+						property=message.get(property,sizeLimit);
+					}
+					if(*property==0x27)
+					{
+						property++;
+						unsigned long sizePackage;
+						property=message.get(property,sizePackage);
+					}
+					if(*property==0x22)
+					{
+						property++;
+						unsigned short sizeLimit;
+						property=message.get(property,sizeLimit);
+					}
+					if(*property==0x19)
+					{
+						property++;
+						property++;
+					}
+					if(*property==0x17)
+					{
+						property++;
+						property++;
+					}
+					if(*property==0x26)
+					{
+						property++;
+						const char *payload = property;
+						unsigned short len;
+						message.getString(payload,len);
+						property+=len;
+					}
+					if(*property==0x15)
+					{
+						property++;
+						const char *payload = property;
+						unsigned short len;
+						message.getString(payload,len);
+						property+=len;
+					}
+					if(*property==0x16)
+					{
+						property++;
+						const char *payload = property;
+						unsigned short len;
+						property=message.get(payload,len);
+						property+=len;
+					}
+				}
+
+				const char *payload = property;
 				message.getString(payload, len);
 				clientId = std::string(payload,len);
 				payload += len;
@@ -43,13 +107,62 @@ void sMQTTClient5::processMessage()
 
 				if (mqtt_flags&sMQTTWillFlag)
 				{
+					unsigned long willPropLen;
+					unsigned char size;
+					payload=message.decodeLength(payload,willPropLen);
+					if(willPropLen)
+					{
+						if(*payload==0x18)
+						{
+							payload++;
+							unsigned long value;
+							payload=message.get(payload,value);
+						}
+						if(*payload==0x1)
+						{
+							payload++;
+							payload++;
+						}
+						if(*payload==0x2)
+						{
+							payload++;
+							unsigned long value;
+							payload=message.get(payload,value);
+						}
+						if(*payload==0x3)
+						{
+							payload++;
+							unsigned short value;
+							message.getString(payload,value);
+							payload+=value;
+						}
+						if(*payload==0x8)
+						{
+							payload++;
+							unsigned short value;
+							message.getString(payload,value);
+							payload+=value;
+						}
+						if(*payload==0x9)
+						{
+							payload++;
+							unsigned short value;
+							payload=message.get(payload,value);
+							payload+=value;
+						}
+						if(*payload==0x26)
+						{
+							payload++;
+						}
+					}
+
 					//topic
 					message.getString(payload, len);
-					//willTopic = std::string(payload, len);
+					willTopic = std::string(payload, len);
 					payload += len;
 					//message
 					message.getString(payload, len);
-					//willMessage = std::string(payload, len);
+					willMessage = std::string(payload, len);
 					payload += len;
 				}
 				std::string username;
@@ -111,6 +224,10 @@ void sMQTTClient5::processMessage()
 				packeteIdent[1] = payload[1];
 				payload += 2;
 			}
+			unsigned char propertyLen=payload[0];
+			payload++;
+
+
 			len = message.end() - payload;
 			std::string _payload(payload, len);
 
