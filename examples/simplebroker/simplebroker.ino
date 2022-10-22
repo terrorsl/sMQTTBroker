@@ -1,6 +1,6 @@
 #include"sMQTTBroker.h"
 
-sMQTTSimpleBroker broker;
+sMQTTBroker broker;
 
 void setup()
 {
