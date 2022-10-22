@@ -22,7 +22,7 @@ bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
 };
 void sMQTTBroker::update()
 {
-#if defined(ESP8266) || defined(ESP32)
+#if defined(ESP8266) || defined(ESP32) || defined(WIO_TERMINAL)
 	if(isCheckWifiConnection)
 	{
 		if (WiFi.isConnected() == false)

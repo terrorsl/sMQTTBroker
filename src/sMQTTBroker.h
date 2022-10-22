@@ -56,6 +56,7 @@ private:
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
+	friend class sMQTTClient;
 };
 //! Simple mqtt broker if you don't need receive event
 class sMQTTSimpleBroker final: public sMQTTBroker
