@@ -41,6 +41,13 @@ public:
 #define TCPServer WiFiServer
 static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
+#elif defined(WIO_TERMINAL)
+#include <rpcWiFi.h>
+#include <WiFiClient.h>
+#include <WiFiServer.h>
+#define TCPClient WiFiClient
+#define TCPServer WiFiServer
+#define SMQTT_LOGD(...)
 #else
 #error "unknown platform"
 #endif

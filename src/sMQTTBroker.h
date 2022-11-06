@@ -44,5 +44,6 @@ private:
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
+	friend class sMQTTClient;
 };
 #endif
