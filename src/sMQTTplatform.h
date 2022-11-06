@@ -3,7 +3,10 @@
 
 #define SMQTT_DEPRECATED(msg) [[deprecated(msg)]]
 
-#if defined(WIN32)
+#if defined(SMQTT_USER_SOCKET)
+// create and write your client and server
+#include"smqtt_user_socket.h"
+#elif defined(WIN32)
 class TCPClient {
 public:
 	bool available() { return false; };
