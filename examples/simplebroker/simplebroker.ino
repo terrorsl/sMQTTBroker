@@ -1,20 +1,22 @@
 #include"sMQTTBroker.h"
+//Use my custom socket
+#define sMQTT_SOCKET
+#include <Ethernet.h>
+//my own socket
+#define TCPClient EthernetClient
+#define TCPServer EthernetServer
+
+#define ETH_SPI+_CS 10
+
+byte mac[] = { 0xBE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
 sMQTTBroker broker;
 
 void setup()
 {
     Serial.begin(115200);
-    const char* ssid = "SSID";         // The SSID (name) of the Wi-Fi network you want to connect to
-    const char* password = "PASSWORD"; // The password of the Wi-Fi network
-    WiFi.begin(ssid, password);
-    while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
-        delay(1000);
-    }
-    Serial.println("Connection established!");  
-    Serial.print("IP address:\t");
-    Serial.println(WiFi.localIP());
-    
+    Ethernet.begin(mac);
+        
     const unsigned short mqttPort=1883;
     broker.init(mqttPort);
     // all done
