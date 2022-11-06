@@ -2,8 +2,9 @@
 #define SMQTTPLATFORM_FILE
 
 #define SMQTT_DEPRECATED(msg) [[deprecated(msg)]]
-
-#if defined(WIN32)
+#if defined(sMQTT_SOCKET)
+//Defined by users in .ino files
+#elif defined(WIN32)
 class TCPClient {
 public:
 	bool available() { return false; };
