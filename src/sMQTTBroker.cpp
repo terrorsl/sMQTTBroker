@@ -21,7 +21,7 @@ void sMQTTBroker::update()
 			return;
 		}
 	}
-	WiFiClient client = _server->available();
+	TCPClient client = _server->available();
 	if (client)
 	{
 		SMQTT_LOGD("New Client");
