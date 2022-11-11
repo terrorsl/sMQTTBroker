@@ -23,6 +23,11 @@ public:
 	//! receive event from broker
 	virtual bool onEvent(sMQTTEvent *event) { return true; }
 
+	//! receive retained topic count
+	unsigned long getRetainedTopicCount();
+	//! receive topic name by index
+	std::string getRetaiedTopicName(unsigned long index);
+
 	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
 	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
 	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};

@@ -281,3 +281,13 @@ void sMQTTBroker::restart()
 #endif
 	_server->begin();
 };
+unsigned long sMQTTBroker::getRetainedTopicCount()
+{
+	return retains.size();
+};
+std::string sMQTTBroker::getRetaiedTopicName(unsigned long index)
+{
+	if(index>=retains.size())
+		return "";
+	return retains[index]->Name();
+};
