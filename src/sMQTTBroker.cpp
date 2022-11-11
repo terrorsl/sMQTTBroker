@@ -265,11 +265,8 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 	}
 	if (retain)
 	{
-		if (payload.empty() == false)
-		{
-			sMQTTTopic Topic((std::string&)topic, (std::string&)payload, qos);
-			updateRetainedTopic(&Topic);
-		}
+		sMQTTTopic Topic((std::string&)topic, (std::string&)payload, qos);
+		updateRetainedTopic(&Topic);
 	}
 };
 void sMQTTBroker::restart()
