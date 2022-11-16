@@ -238,7 +238,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
-	int time = 0;
+	int msg_id = clock();
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -251,15 +251,22 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 			msg.add(topic.c_str(), topic.size());
 			// msg_id
 			if (qos) {
-				msg.add(time >> 8);
-				msg.add(time);
-				time++;
+				msg.add(msg_id >> 8);
+				msg.add(msg_id);
+				msg_id++;
 			}
 			msg.add(payload.c_str(), payload.size(), false);
 			//msg.sendTo(client);
+			bool once=true;
 			for (auto cl : subList)
 			{
-				msg.sendTo(cl);
+				if(once)
+				{
+					msg.sendTo(cl);
+					once=false;
+				}
+				else
+					msg.sendTo(cl,false);
 			}
 		}
 	}

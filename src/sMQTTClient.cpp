@@ -189,6 +189,15 @@ void sMQTTClient::processMessage()
 		{
 		}
 		break;
+	case sMQTTMessage::Type::PubRec:
+		{
+			const char *payload = header;
+			sMQTTMessage msg(sMQTTMessage::Type::PubRel);
+			msg.add(payload[0]);
+			msg.add(payload[1]);
+			msg.sendTo(this);
+		}
+		break;
 	case sMQTTMessage::Type::PubRel:
 		{
 			const char *payload = header;
@@ -196,6 +205,11 @@ void sMQTTClient::processMessage()
 			msg.add(payload[0]);
 			msg.add(payload[1]);
 			msg.sendTo(this);
+		}
+		break;
+	case sMQTTMessage::Type::PubComp:
+		{
+
 		}
 		break;
 	case sMQTTMessage::Type::Subscribe:
@@ -267,7 +281,7 @@ void sMQTTClient::processMessage()
 		break;
 	default:
 		{
-			SMQTT_LOGD("unknown message", message.type());
+			SMQTT_LOGD("unknown message %d", message.type());
 			mqtt_connected = false;
 			_client.stop();
 		}
