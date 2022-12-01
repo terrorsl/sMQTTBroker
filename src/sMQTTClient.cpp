@@ -1,6 +1,9 @@
 #include "sMQTTBroker.h"
+#if defined(WIN32)
+#include<windows.h>
+#endif
 
-sMQTTClient::sMQTTClient(sMQTTBroker *parent, TCPClient &client):mqtt_connected(false), _parent(parent)
+sMQTTClient::sMQTTClient(sMQTTBroker *parent, sMQTTOSClient *client):mqtt_connected(false), _parent(parent)
 {
 	_client = client;
 	keepAlive = 25;
@@ -13,9 +16,9 @@ sMQTTClient::~sMQTTClient()
 };
 void sMQTTClient::update()
 {
-	while (_client.available()>0)
+	while (_client->available()>0)
 	{
-		message.incoming(_client.read());
+		message.incoming(_client->read());
 		if (message.type())
 		{
 			processMessage();
@@ -26,22 +29,24 @@ void sMQTTClient::update()
 	unsigned long currentMillis;
 #if defined(ESP8266) || defined(ESP32)
 	currentMillis = millis();
+#elif defined(WIN32)
+	currentMillis = GetTickCount();
 #endif
 	if (keepAlive != 0 && aliveMillis < currentMillis)
 	{
 		SMQTT_LOGD("aliveMillis(%d) < currentMillis(%d)", aliveMillis, currentMillis);
-		_client.stop();
+		_client->stop();
 	}
 	//else
 	//	SMQTT_LOGD("time %d", aliveMillis - currentMillis);
 };
 bool sMQTTClient::isConnected()
 {
-	return _client.connected();
+	return _client->connected();
 };
 void sMQTTClient::write(const char* buf, size_t length)
 {
-	_client.write(buf, length);
+	_client->write(buf, length);
 }
 void sMQTTClient::processMessage()
 {
@@ -57,7 +62,7 @@ void sMQTTClient::processMessage()
 		{
 			if (mqtt_connected)
 			{
-				_client.stop();
+				_client->stop();
 				break;
 			}
 			unsigned char status = 0;
@@ -130,7 +135,7 @@ void sMQTTClient::processMessage()
 			msg.sendTo(this);
 
 			if (status)
-				_client.stop();
+				_client->stop();
 			else
 				mqtt_connected = true;
 		}
@@ -189,15 +194,6 @@ void sMQTTClient::processMessage()
 		{
 		}
 		break;
-	case sMQTTMessage::Type::PubRec:
-		{
-			const char *payload = header;
-			sMQTTMessage msg(sMQTTMessage::Type::PubRel);
-			msg.add(payload[0]);
-			msg.add(payload[1]);
-			msg.sendTo(this);
-		}
-		break;
 	case sMQTTMessage::Type::PubRel:
 		{
 			const char *payload = header;
@@ -205,11 +201,6 @@ void sMQTTClient::processMessage()
 			msg.add(payload[0]);
 			msg.add(payload[1]);
 			msg.sendTo(this);
-		}
-		break;
-	case sMQTTMessage::Type::PubComp:
-		{
-
 		}
 		break;
 	case sMQTTMessage::Type::Subscribe:
@@ -270,7 +261,7 @@ void sMQTTClient::processMessage()
 	case sMQTTMessage::Type::Disconnect:
 		{
 			mqtt_connected = false;
-			_client.stop();
+			_client->stop();
 		}
 		break;
 	case sMQTTMessage::Type::PingReq:
@@ -281,9 +272,9 @@ void sMQTTClient::processMessage()
 		break;
 	default:
 		{
-			SMQTT_LOGD("unknown message %d", message.type());
+			SMQTT_LOGD("unknown message", message.type());
 			mqtt_connected = false;
-			_client.stop();
+			_client->stop();
 		}
 		break;
 	}

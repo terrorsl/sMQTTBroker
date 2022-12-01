@@ -4,16 +4,21 @@ Main class
 #ifndef SMQTTBROKER_FILE
 #define SMQTTBROKER_FILE
 
-#include"sMQTTplatform.h"
+//#include"sMQTTplatform.h"
+#include"sMQTTSocket.h"
 #include"sMQTTClient.h"
 #include"sMQTTTopic.h"
 #include"sMQTTEvent.h"
+
+#define SMQTT_DEPRECATED(msg) [[deprecated(msg)]]
+
+#define SMQTT_LOGD
 
 class sMQTTBroker
 {
 public:
 	//! setup broker
-	bool init(unsigned short port, bool checkWifiConnection=false);
+	bool init(sMQTTOSServer *server);
 	//! call in loop function
 	void update();
 	//! publish message
@@ -45,7 +50,8 @@ private:
 private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
-	TCPServer *_server;
+	sMQTTOSServer *_server;
+	//TCPServer *_server;
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;

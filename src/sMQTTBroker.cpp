@@ -1,11 +1,10 @@
 #include"sMQTTBroker.h"
 
-bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
+bool sMQTTBroker::init(sMQTTOSServer *server)
 {
-	isCheckWifiConnection=checkWifiConnection;
-	_server = new TCPServer(port);
-	if (_server == 0)
+	if (server == 0)
 		return false;
+	_server = server;
 	_server->begin();
 	return true;
 };
@@ -21,14 +20,22 @@ void sMQTTBroker::update()
 			return;
 		}
 	}
-	TCPClient client = _server->available();
-	if (client)
-	{
-		SMQTT_LOGD("New Client");
-		sMQTTClient *sClient = new sMQTTClient(this, client);
-		clients.push_back(sClient);
-	}
 #endif
+	if (_server->isConnected() == false)
+	{
+		sMQTTLostConnectionEvent event;
+		onEvent(&event);
+	}
+	else
+	{
+		sMQTTOSClient *client = _server->available();
+		if (client)
+		{
+			SMQTT_LOGD("New Client");
+			sMQTTClient *sClient = new sMQTTClient(this, client);
+			clients.push_back(sClient);
+		}
+	}
 	sMQTTClientList::iterator clit;
 	for (clit = clients.begin(); clit != clients.end(); clit++)
 	{
@@ -238,7 +245,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
-	int msg_id = clock();
+	int time = 0;
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -251,22 +258,15 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 			msg.add(topic.c_str(), topic.size());
 			// msg_id
 			if (qos) {
-				msg.add(msg_id >> 8);
-				msg.add(msg_id);
-				msg_id++;
+				msg.add(time >> 8);
+				msg.add(time);
+				time++;
 			}
 			msg.add(payload.c_str(), payload.size(), false);
 			//msg.sendTo(client);
-			bool once=true;
 			for (auto cl : subList)
 			{
-				if(once)
-				{
-					msg.sendTo(cl);
-					once=false;
-				}
-				else
-					msg.sendTo(cl,false);
+				msg.sendTo(cl);
 			}
 		}
 	}
