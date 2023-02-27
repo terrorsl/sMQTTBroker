@@ -50,6 +50,7 @@ void sMQTTBroker::update()
 					sub= subscribes.erase(sub);
 					if (sub == subscribes.end())
 						break;
+					sub--;
 				}
 			}
 
@@ -58,6 +59,7 @@ void sMQTTBroker::update()
 			SMQTT_LOGD("Clients %d", clients.size());
 			if (clit == clients.end())
 				break;
+			clit--;
 		}
 	}
 };
