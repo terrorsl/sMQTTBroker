@@ -64,6 +64,8 @@ public:
 	};
 	void sendWillMessage();
 	virtual void processMessage()=0;
+
+	//IPAddress getClientIP();
 protected:
 	void updateLiveStatus();
 
