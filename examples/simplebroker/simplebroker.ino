@@ -1,10 +1,16 @@
 #include"sMQTTBroker.h"
+#include"sMQTTplatform.h"
 
 sMQTTBroker broker;
 
 void setup()
 {
-    Serial.begin(115200);
+    
+    const unsigned short mqttPort=1883;
+    sMQTTOSServer *server = newsMQTTServer(mqttPort);
+    broker.init(server);
+
+    /*Serial.begin(115200);
     const char* ssid = "SSID";         // The SSID (name) of the Wi-Fi network you want to connect to
     const char* password = "PASSWORD"; // The password of the Wi-Fi network
     WiFi.begin(ssid, password);
@@ -17,7 +23,7 @@ void setup()
     
     const unsigned short mqttPort=1883;
     broker.init(mqttPort);
-    // all done
+    // all done*/
 }
 void loop()
 {

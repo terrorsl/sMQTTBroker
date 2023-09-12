@@ -4,7 +4,6 @@ Main class
 #ifndef SMQTTBROKER_FILE
 #define SMQTTBROKER_FILE
 
-//#include"sMQTTplatform.h"
 #include"sMQTTSocket.h"
 #include"sMQTTClient.h"
 #include"sMQTTTopic.h"
