@@ -11,7 +11,7 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
-static const char *debugMessageType[] = {
+[[maybe_unused]] static const char *debugMessageType[] = {
 	"Unknown",
 	"Connect",
 	"ConnAck",

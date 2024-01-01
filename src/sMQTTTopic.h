@@ -36,7 +36,7 @@ public:
 	const char *Payload() {
 		return _payload;
 	}
-	const unsigned char QoS() {
+	unsigned char QoS() {
 		return qos;
 	}
 	bool match(sMQTTTopic *other);

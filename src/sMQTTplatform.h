@@ -39,7 +39,7 @@ public:
 #endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
-static const char *SMQTTTAG = "sMQTTBroker";
+[[maybe_unused]] static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
 #elif defined(WIO_TERMINAL)
 #include <rpcWiFi.h>
