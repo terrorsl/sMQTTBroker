@@ -4,6 +4,12 @@
 #include<vector>
 #include<string>
 
+#if (__cplusplus >= 201703L)
+#define MAYBE_UNUSED [[maybe_unused]]
+#else
+#define MAYBE_UNUSED
+#endif
+
 enum sMQTTError
 {
 	sMQTTOk = 0,
@@ -11,7 +17,7 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
-[[maybe_unused]] static const char *debugMessageType[] = {
+MAYBE_UNUSED static const char *debugMessageType[] = {
 	"Unknown",
 	"Connect",
 	"ConnAck",
