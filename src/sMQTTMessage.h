@@ -75,7 +75,7 @@ public:
 	{
 		if (addLength)
 		{
-			buffer.reserve(buffer.size() + addLength + 2);
+			buffer.reserve(buffer.size() + len + 2);
 			incoming(len >> 8);
 			incoming(len & 0xFF);
 		}
