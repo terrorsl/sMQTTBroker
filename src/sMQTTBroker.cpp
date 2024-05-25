@@ -232,7 +232,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 			return false;
 		if (c->getClientId() == client->getClientId())
 		{
-			SMQTT_LOGD("found:%s client size:%d", client->getClientId(), clients.size());
+			SMQTT_LOGD("found:%s client size:%d", client->getClientId().c_str(), clients.size());
 			return true;
 		}
 	}
