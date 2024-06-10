@@ -1,0 +1,10 @@
+# In the case of no checkout action call in the whole build script, following action should be called before executing the doxygenize action
+uses: actions/checkout@v3
+uses: langroodi/doxygenize@v1.7.0
+# with:
+#     doxygenconf: '[Configuration file path including the file name (e.g., ./doc/doxygen.conf)]'
+#     htmloutput: '[HTML output folder (e.g., ./doc/html/)]'
+#     ghpagesbranch: '[GitHub Pages branch name (e.g., master)]'
+#     ghpagesdir: '[GitHub Pages directory path (e.g., ./docs/)]'
+#     darkmode: '[true to enable Doxygen dark theme; otherwise use Doxygen default theme]'
+#     customheader: '[HTML header file URL (e.g., https://raw.githubusercontent.com/langroodi/doxygenize/master/header/woman_life_freedom.html)]'
