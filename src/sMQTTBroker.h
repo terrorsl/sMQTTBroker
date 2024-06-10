@@ -12,11 +12,16 @@ Main class
 class sMQTTBroker
 {
 public:
-	/*! setup broker \param port set listen port \param checkWifiConnection enable\disable notify wifi connection in onEvent*/
+	/*! setup broker \param port set listen port \param checkWifiConnection enable/disable notify wifi connection in onEvent*/
 	bool init(unsigned short port, bool checkWifiConnection=false);
 	/*! call in loop function*/
 	void update();
-	//! publish message \param topic name of topic \param payload \param qos \param retain
+	/*! publish message
+		\param topic name of topic
+		\param payload
+		\param qos
+		\param retain
+	*/
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 	//! restart WIFI server
 	void restart();

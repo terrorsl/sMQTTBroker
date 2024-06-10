@@ -17,7 +17,7 @@ class sMQTTBroker;
 #define sMQTTConnReturnServerUnavailable 0x3
 #define sMQTTConnReturnBadUsernameOrPassword 0x4
 
-
+//!\brief Main Client class
 class sMQTTClient
 {
 public:

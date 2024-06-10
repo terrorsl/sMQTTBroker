@@ -30,17 +30,29 @@ public:
 			_payload = 0;
 		qos = other->QoS();
 	}
+	//! toppic name
 	const char *Name() {
 		return _name.c_str();
 	}
+	//! topic payload
 	const char *Payload() {
 		return _payload;
 	}
+	//! topic qos
 	unsigned char QoS() {
 		return qos;
 	}
+	/*! compare with other topic
+		\param other topic class
+	*/
 	bool match(sMQTTTopic *other);
+	/*! compare with other topic
+		\param other topic name
+	*/
 	bool match(const std::string &other);
+	/*! subscribe topic
+		\param client
+	*/
 	void subscribe(sMQTTClient *client);
 	bool unsubscribe(sMQTTClient *client) {
 		sMQTTClientList::iterator cli; for (cli = clients.begin(); cli != clients.end(); cli++)if (*cli == client) { clients.erase(cli); break; }
