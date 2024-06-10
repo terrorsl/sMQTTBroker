@@ -32,7 +32,7 @@ void sMQTTBroker::update()
 			return;
 		}
 	}
-	WiFiClient client = _server->available();
+	TCPClient client = _server->available();
 	if (client)
 	{
 		SMQTT_LOGD("New Client");
@@ -70,6 +70,7 @@ void sMQTTBroker::update()
 					sub= subscribes.erase(sub);
 					if (sub == subscribes.end())
 						break;
+					sub--;
 				}
 			}
 
@@ -78,6 +79,7 @@ void sMQTTBroker::update()
 			SMQTT_LOGD("Clients %d", clients.size());
 			if (clit == clients.end())
 				break;
+			clit--;
 		}
 	}
 };
@@ -245,7 +247,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 			return false;
 		if (c->getClientId() == client->getClientId())
 		{
-			SMQTT_LOGD("found:%s client size:%d", client->getClientId(), clients.size());
+			SMQTT_LOGD("found:%s client size:%d", client->getClientId().c_str(), clients.size());
 			return true;
 		}
 	}
@@ -253,7 +255,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
-	int time = 0;
+	int msg_id = clock();
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
@@ -266,25 +268,29 @@ void sMQTTBroker::publish(const std::string &topic, const std::string &payload, 
 			msg.add(topic.c_str(), topic.size());
 			// msg_id
 			if (qos) {
-				msg.add(time >> 8);
-				msg.add(time);
-				time++;
+				msg.add(msg_id >> 8);
+				msg.add(msg_id);
+				msg_id++;
 			}
 			msg.add(payload.c_str(), payload.size(), false);
 			//msg.sendTo(client);
+			bool once=true;
 			for (auto cl : subList)
 			{
-				msg.sendTo(cl);
+				if(once)
+				{
+					msg.sendTo(cl);
+					once=false;
+				}
+				else
+					msg.sendTo(cl,false);
 			}
 		}
 	}
 	if (retain)
 	{
-		if (payload.empty() == false)
-		{
-			sMQTTTopic Topic((std::string&)topic, (std::string&)payload, qos);
-			updateRetainedTopic(&Topic);
-		}
+		sMQTTTopic Topic((std::string&)topic, (std::string&)payload, qos);
+		updateRetainedTopic(&Topic);
 	}
 };
 void sMQTTBroker::restart()
@@ -295,4 +301,14 @@ void sMQTTBroker::restart()
 	_server->end();
 #endif
 	_server->begin();
+};
+unsigned long sMQTTBroker::getRetainedTopicCount()
+{
+	return retains.size();
+};
+std::string sMQTTBroker::getRetaiedTopicName(unsigned long index)
+{
+	if(index>=retains.size())
+		return "";
+	return retains[index]->Name();
 };

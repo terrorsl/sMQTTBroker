@@ -3,7 +3,16 @@
 
 #define SMQTT_DEPRECATED(msg) [[deprecated(msg)]]
 
-#if defined(WIN32)
+#if (__cplusplus >= 201703L)
+#define MAYBE_UNUSED [[maybe_unused]]
+#else
+#define MAYBE_UNUSED
+#endif
+
+#if defined(SMQTT_USER_SOCKET)
+// create and write your client and server
+#include"smqtt_user_socket.h"
+#elif defined(WIN32)
 class TCPClient {
 public:
 	bool available() { return false; };
@@ -36,7 +45,7 @@ public:
 #endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
-static const char *SMQTTTAG = "sMQTTBroker";
+MAYBE_UNUSED static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
 #elif defined(WIO_TERMINAL)
 #include <rpcWiFi.h>

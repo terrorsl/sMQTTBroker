@@ -53,6 +53,7 @@ public:
 	/*! Connection status
 	\return True if connected or False 
 	*/
+	//! check connection
 	bool isConnected();
 	void write(const char* buf, size_t length);
 

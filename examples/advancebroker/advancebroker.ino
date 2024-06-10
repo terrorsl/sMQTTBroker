@@ -20,7 +20,7 @@ public:
         case UnSubscribe_sMQTTEventType:
         case Subscribe_sMQTTEventType:
             {
-                sMQTTSubUnSubClientEvent *e=(sMQTTNewClientEvent*)event;
+                sMQTTSubUnSubClientEvent *e=(sMQTTSubUnSubClientEvent*)event;
             }
             break;
         }
