@@ -12,20 +12,20 @@ Main class
 class sMQTTBroker
 {
 public:
-	//! setup broker
+	/*! setup broker \param port set listen port \param checkWifiConnection enable\disable notify wifi connection in onEvent*/
 	bool init(unsigned short port, bool checkWifiConnection=false);
-	//! call in loop function
+	/*! call in loop function*/
 	void update();
-	//! publish message
+	//! publish message \param topic name of topic \param payload \param qos \param retain
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 	//! restart WIFI server
 	void restart();
-	//! receive event from broker
+	//! receive event from broker \param event
 	virtual bool onEvent(sMQTTEvent *event) { return true; }
 
 	//! receive retained topic count
 	unsigned long getRetainedTopicCount();
-	//! receive topic name by index
+	//! receive topic name by index \param index index of topic
 	std::string getRetaiedTopicName(unsigned long index);
 
 	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
@@ -42,7 +42,7 @@ private:
 	void updateRetainedTopic(sMQTTTopic *topic);
 
 	bool isClientConnected(sMQTTClient *client);
-private:
+
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
