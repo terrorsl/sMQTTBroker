@@ -80,7 +80,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed4dbbbd5522b17321ada92865693bfa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_broker.html#aed4dbbbd5522b17321ada92865693bfa">update</a> ()</td></tr>
 <tr class="separator:aed4dbbbd5522b17321ada92865693bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ac9b1d999900dd2b0f56f4a2108ca36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_broker.html#a1ac9b1d999900dd2b0f56f4a2108ca36">publish</a> (const std::string &amp;topic, const std::string &amp;payload, unsigned char qos=0, bool retain=false)</td></tr>
-<tr class="memdesc:a1ac9b1d999900dd2b0f56f4a2108ca36"><td class="mdescLeft">&#160;</td><td class="mdescRight">publish message  <a href="classs_m_q_t_t_broker.html#a1ac9b1d999900dd2b0f56f4a2108ca36">More...</a><br /></td></tr>
 <tr class="separator:a1ac9b1d999900dd2b0f56f4a2108ca36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3485afb8697f9fc3f415a8fca35717ee"><td class="memItemLeft" align="right" valign="top"><a id="a3485afb8697f9fc3f415a8fca35717ee" name="a3485afb8697f9fc3f415a8fca35717ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>restart</b> ()</td></tr>
@@ -184,7 +183,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b></td>
 <p >setup broker</p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">port</td><td>set listen port</td></tr>
-    <tr><td class="paramname">checkWifiConnection</td><td>enable\disable notify wifi connection in onEvent </td></tr>
+    <tr><td class="paramname">checkWifiConnection</td><td>enable/disable notify wifi connection in onEvent </td></tr>
   </table>
   </dd>
 </dl>
@@ -262,17 +261,11 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>publish message </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p >publish message </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">topic</td><td>name of topic</td></tr>
+    <tr><td class="paramname">topic</td><td>name of topic </td></tr>
     <tr><td class="paramname">payload</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<p>param qos</p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
+    <tr><td class="paramname">qos</td><td></td></tr>
     <tr><td class="paramname">retain</td><td></td></tr>
   </table>
   </dd>
