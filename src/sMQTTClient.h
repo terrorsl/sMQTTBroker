@@ -17,7 +17,7 @@ class sMQTTBroker;
 #define sMQTTConnReturnServerUnavailable 0x3
 #define sMQTTConnReturnBadUsernameOrPassword 0x4
 
-
+//!\brief Main Client class
 class sMQTTClient
 {
 public:
@@ -26,9 +26,11 @@ public:
 
 	void update();
 	
+	//! check connection
 	bool isConnected();
 	void write(const char* buf, size_t length);
 
+	//! get client id
 	const std::string &getClientId() {
 		return clientId;
 	};

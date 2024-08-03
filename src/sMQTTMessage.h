@@ -4,6 +4,12 @@
 #include<vector>
 #include<string>
 
+#if (__cplusplus >= 201703L)
+#define MAYBE_UNUSED [[maybe_unused]]
+#else
+#define MAYBE_UNUSED
+#endif
+
 enum sMQTTError
 {
 	sMQTTOk = 0,
@@ -11,7 +17,7 @@ enum sMQTTError
 	sMQTTInvalidMessage = 2,
 };
 
-static const char *debugMessageType[] = {
+MAYBE_UNUSED static const char *debugMessageType[] = {
 	"Unknown",
 	"Connect",
 	"ConnAck",
@@ -69,7 +75,7 @@ public:
 	{
 		if (addLength)
 		{
-			buffer.reserve(buffer.size() + addLength + 2);
+			buffer.reserve(buffer.size() + len + 2);
 			incoming(len >> 8);
 			incoming(len & 0xFF);
 		}
