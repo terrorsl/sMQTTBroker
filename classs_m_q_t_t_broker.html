@@ -64,14 +64,22 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classs_m_q_t_t_broker-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">sMQTTBroker Class Reference</div></div>
+  <div class="headertitle"><div class="title">sMQTTBroker Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="s_m_q_t_t_broker_8h_source.html">sMQTTBroker.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for sMQTTBroker:</div>
+<div class="dyncontent">
+<div class="center"><img src="classs_m_q_t_t_broker__inherit__graph.png" border="0" usemap="#as_m_q_t_t_broker_inherit__map" alt="Inheritance graph"/></div>
+<map name="as_m_q_t_t_broker_inherit__map" id="as_m_q_t_t_broker_inherit__map">
+<area shape="rect" title=" " alt="" coords="44,5,148,32"/>
+<area shape="rect" href="classs_m_q_t_t_broker_without_event.html" title=" " alt="" coords="5,80,187,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -85,9 +93,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>restart</b> ()</td></tr>
 <tr class="memdesc:a3485afb8697f9fc3f415a8fca35717ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">restart WIFI server <br /></td></tr>
 <tr class="separator:a3485afb8697f9fc3f415a8fca35717ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bbb70ab720d3157da5e3a3da5f02abb"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_broker.html#a6bbb70ab720d3157da5e3a3da5f02abb">onEvent</a> (<a class="el" href="classs_m_q_t_t_event.html">sMQTTEvent</a> *event)</td></tr>
-<tr class="memdesc:a6bbb70ab720d3157da5e3a3da5f02abb"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive event from broker  <a href="classs_m_q_t_t_broker.html#a6bbb70ab720d3157da5e3a3da5f02abb">More...</a><br /></td></tr>
-<tr class="separator:a6bbb70ab720d3157da5e3a3da5f02abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a7fd2bc89d71217ff06c64a9367849e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_broker.html#a6a7fd2bc89d71217ff06c64a9367849e">onEvent</a> (<a class="el" href="classs_m_q_t_t_event.html">sMQTTEvent</a> *event)=0</td></tr>
+<tr class="memdesc:a6a7fd2bc89d71217ff06c64a9367849e"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive event from broker  <a href="classs_m_q_t_t_broker.html#a6a7fd2bc89d71217ff06c64a9367849e">More...</a><br /></td></tr>
+<tr class="separator:a6a7fd2bc89d71217ff06c64a9367849e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a509a3c233618e3f3a6ef792a18f5b171"><td class="memItemLeft" align="right" valign="top"><a id="a509a3c233618e3f3a6ef792a18f5b171" name="a509a3c233618e3f3a6ef792a18f5b171"></a>
 unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>getRetainedTopicCount</b> ()</td></tr>
 <tr class="memdesc:a509a3c233618e3f3a6ef792a18f5b171"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive retained topic count <br /></td></tr>
@@ -95,30 +103,6 @@ unsigned long&#160;</td><td class="memItemRight" valign="bottom"><b>getRetainedT
 <tr class="memitem:a37409a2424d0a743afeafcf05db83389"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classs_m_q_t_t_broker.html#a37409a2424d0a743afeafcf05db83389">getRetaiedTopicName</a> (unsigned long index)</td></tr>
 <tr class="memdesc:a37409a2424d0a743afeafcf05db83389"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive topic name by index  <a href="classs_m_q_t_t_broker.html#a37409a2424d0a743afeafcf05db83389">More...</a><br /></td></tr>
 <tr class="separator:a37409a2424d0a743afeafcf05db83389"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d49b292c961097014c3b02a66d644f2"><td class="memItemLeft" align="right" valign="top"><a id="a5d49b292c961097014c3b02a66d644f2" name="a5d49b292c961097014c3b02a66d644f2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SMQTT_DEPRECATED</b> (&quot;onConnect is deprecated, use <a class="el" href="classs_m_q_t_t_broker.html#a6bbb70ab720d3157da5e3a3da5f02abb">onEvent</a>&quot;) virtual bool onConnect(<a class="el" href="classs_m_q_t_t_client.html">sMQTTClient</a> *client</td></tr>
-<tr class="separator:a5d49b292c961097014c3b02a66d644f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f23ca461ee6cd53e2914f3a8bd197c5"><td class="memItemLeft" align="right" valign="top"><a id="a6f23ca461ee6cd53e2914f3a8bd197c5" name="a6f23ca461ee6cd53e2914f3a8bd197c5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SMQTT_DEPRECATED</b> (&quot;onRemove is deprecated, use <a class="el" href="classs_m_q_t_t_broker.html#a6bbb70ab720d3157da5e3a3da5f02abb">onEvent</a>&quot;) virtual void onRemove(<a class="el" href="classs_m_q_t_t_client.html">sMQTTClient</a> *)</td></tr>
-<tr class="separator:a6f23ca461ee6cd53e2914f3a8bd197c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2130aa6c19df234d11c9f06740b02484"><td class="memItemLeft" align="right" valign="top"><a id="a2130aa6c19df234d11c9f06740b02484" name="a2130aa6c19df234d11c9f06740b02484"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SMQTT_DEPRECATED</b> (&quot;onPublish is deprecated, use <a class="el" href="classs_m_q_t_t_broker.html#a6bbb70ab720d3157da5e3a3da5f02abb">onEvent</a>&quot;) virtual void onPublish(<a class="el" href="classs_m_q_t_t_client.html">sMQTTClient</a> *client</td></tr>
-<tr class="separator:a2130aa6c19df234d11c9f06740b02484"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:acc22744622659c3b0eaf1b1e106176cc"><td class="memItemLeft" align="right" valign="top"><a id="acc22744622659c3b0eaf1b1e106176cc" name="acc22744622659c3b0eaf1b1e106176cc"></a>
-const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>username</b></td></tr>
-<tr class="separator:acc22744622659c3b0eaf1b1e106176cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46b88b125ba28be6e8f4bb82eb472b44"><td class="memItemLeft" align="right" valign="top"><a id="a46b88b125ba28be6e8f4bb82eb472b44" name="a46b88b125ba28be6e8f4bb82eb472b44"></a>
-const std::string const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>password</b> { return true</td></tr>
-<tr class="separator:a46b88b125ba28be6e8f4bb82eb472b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51a04ae8d2a1b1150b8a92b9b8ad3249"><td class="memItemLeft" align="right" valign="top"><a id="a51a04ae8d2a1b1150b8a92b9b8ad3249" name="a51a04ae8d2a1b1150b8a92b9b8ad3249"></a>
-const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>topic</b></td></tr>
-<tr class="separator:a51a04ae8d2a1b1150b8a92b9b8ad3249"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91bcdc6f16a2c8039c4a28b6dd5aa0d0"><td class="memItemLeft" align="right" valign="top"><a id="a91bcdc6f16a2c8039c4a28b6dd5aa0d0" name="a91bcdc6f16a2c8039c4a28b6dd5aa0d0"></a>
-const std::string const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>payload</b> {}</td></tr>
-<tr class="separator:a91bcdc6f16a2c8039c4a28b6dd5aa0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -190,8 +174,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b></td>
 
 </div>
 </div>
-<a id="a6bbb70ab720d3157da5e3a3da5f02abb" name="a6bbb70ab720d3157da5e3a3da5f02abb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6bbb70ab720d3157da5e3a3da5f02abb">&#9670;&nbsp;</a></span>onEvent()</h2>
+<a id="a6a7fd2bc89d71217ff06c64a9367849e" name="a6a7fd2bc89d71217ff06c64a9367849e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a7fd2bc89d71217ff06c64a9367849e">&#9670;&nbsp;</a></span>onEvent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,7 +193,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b></td>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -221,6 +205,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>sMQTTClient</b></td>
   </table>
   </dd>
 </dl>
+
+<p>Implemented in <a class="el" href="classs_m_q_t_t_broker_without_event.html#a917ae4436332acc118ca4339f4c4e8a4">sMQTTBrokerWithoutEvent</a>.</p>
 
 </div>
 </div>
