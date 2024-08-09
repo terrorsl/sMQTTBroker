@@ -19,7 +19,7 @@ public:
 	\return True if no error
 	*/
 	bool init(unsigned short port, bool checkWifiConnection=false);
-	//! call in loop function
+	/*! call in loop function*/
 	void update();
 	/*! publish message
 	\param[in] topic name topic
@@ -31,13 +31,13 @@ public:
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 	//! restart WIFI server
 	void restart();
-	//! receive event from broker
+private:
+  //! receive event from broker
 	//! \param[in] event Some event from broker
 	//! \return True - process, False - error
 	virtual bool onEvent(sMQTTEvent *event) = 0;
-
-	//! \internal
-	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
+  
+  void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
 	bool subscribe(sMQTTClient *client, const char *topic);
 	void unsubscribe(sMQTTClient *client, const char *topic);
@@ -46,10 +46,7 @@ public:
 	void updateRetainedTopic(sMQTTTopic *topic);
 
 	bool isClientConnected(sMQTTClient *client);
-	//! \endinternal
-protected:
-	unsigned char version;
-private:
+  
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
