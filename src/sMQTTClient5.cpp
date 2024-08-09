@@ -25,7 +25,7 @@ void sMQTTClient5::processMessage()
 			if (header[6] != 0x05)
 			{
 				status = sMQTTConnReturn5UnsupportedProtocolVersion;
-				// Level 3.1.1
+				// Level 5
 			}
 			else
 			{
