@@ -34,8 +34,10 @@ public:
 	//! \param[in] event Some event from broker
 	//! \return True - process, False - error
 	virtual bool onEvent(sMQTTEvent *event) = 0;
-
-	//! \internal
+protected:
+	unsigned char version;
+private:
+//! \internal
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
 	bool subscribe(sMQTTClient *client, const char *topic);
@@ -46,9 +48,7 @@ public:
 
 	bool isClientConnected(sMQTTClient *client);
 	//! \endinternal
-protected:
-	unsigned char version;
-private:
+	
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
