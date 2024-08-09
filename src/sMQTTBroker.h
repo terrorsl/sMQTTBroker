@@ -22,23 +22,27 @@ public:
 	/*! call in loop function*/
 	void update();
 	/*! publish message
-		\param topic name of topic
-		\param payload
-		\param qos
-		\param retain
+	\param[in] topic name topic
+	\param[in] payload data
+	\param[in] qos default 0
+	\param[in] retain default False
+	\return Nothing
 	*/
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 	//! restart WIFI server
 	void restart();
-	//! receive event from broker \param event
-	//! \param[in] event Some event from broker
-	//! \return True - process, False - error
-	virtual bool onEvent(sMQTTEvent *event) = 0;
+
+	unsigned long getRetainedTopicCount();
+	std::string getRetaiedTopicName(unsigned long index);
 protected:
 	unsigned char version;
 private:
-//! \internal
-	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
+  	//! receive event from broker
+	//! \param[in] event Some event from broker
+	//! \return True - process, False - error
+	virtual bool onEvent(sMQTTEvent *event) = 0;
+  
+  	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
 	bool subscribe(sMQTTClient *client, const char *topic);
 	void unsubscribe(sMQTTClient *client, const char *topic);
@@ -47,8 +51,7 @@ private:
 	void updateRetainedTopic(sMQTTTopic *topic);
 
 	bool isClientConnected(sMQTTClient *client);
-	//! \endinternal
-	
+  
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
@@ -56,6 +59,8 @@ private:
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
 	friend class sMQTTClient;
+	friend class sMQTTClient3;
+	friend class sMQTTClient5;
 };
 //! Simple mqtt broker if you don't need receive event
 class sMQTTSimpleBroker final: public sMQTTBroker
