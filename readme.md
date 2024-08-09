@@ -18,6 +18,7 @@ sMQTTBroker is light and fast mqtt broker
 
 ## Documentation:
 [![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
+[Simple MQTT Broker](https://terrorsl.github.io/sMQTTBroker/index.html)
 
 ## IDE
 
@@ -37,7 +38,7 @@ sMQTTBroker is light and fast mqtt broker
 #include<sMQTTBroker.h>
 ```
 ```c++
-sMQTTBroker broker;
+sMQTTBrokerWithoutEvent broker;
 #define PORT 1883
 ```
 ```c++
