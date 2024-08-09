@@ -34,6 +34,7 @@ MAYBE_UNUSED static const char *debugMessageType[] = {
 	"PingResp",
 	"Disconnect"
 };
+#endif
 
 class sMQTTClient;
 class sMQTTMessage
@@ -55,7 +56,9 @@ public:
 		UnSuback = 0xB0,
 		PingReq = 0xC0,
 		PingResp = 0xD0,
-		Disconnect = 0xE0
+		Disconnect = 0xE0,
+		// version 5 only
+		AUTH = 0xF0
 	};
 	enum State
 	{
@@ -99,6 +102,11 @@ public:
 	// buff is MSB/LSB/STRING
 	// output buff+=2, len=length(str)
 	static void getString(const char* &buff, unsigned short &len);
+
+	const char *decodeLength(const char *msg, unsigned long &size);
+
+	const char *get(const char *msg, unsigned long &value);
+	const char *get(const char *msg, unsigned short &value);
 private:
 	void create(Type type)
 	{

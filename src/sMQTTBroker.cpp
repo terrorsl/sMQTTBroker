@@ -1,7 +1,18 @@
 #include"sMQTTBroker.h"
 
+sMQTTBroker::sMQTTBroker(unsigned char _version):version(_version)
+{
+};
 bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
 {
+	switch(version)
+	{
+	case 3:
+	case 5:
+		break;
+	default:
+		return false;
+	}
 	isCheckWifiConnection=checkWifiConnection;
 	_server = new TCPServer(port);
 	if (_server == 0)
@@ -25,7 +36,16 @@ void sMQTTBroker::update()
 	if (client)
 	{
 		SMQTT_LOGD("New Client");
-		sMQTTClient *sClient = new sMQTTClient(this, client);
+		sMQTTClient *sClient;
+		switch(version)
+		{
+		case 3:
+			sClient = new sMQTTClient3(this, client);
+			break;
+		case 5:
+			sClient = new sMQTTClient5(this, client);
+			break;
+		}
 		clients.push_back(sClient);
 	}
 #endif
@@ -37,8 +57,8 @@ void sMQTTBroker::update()
 			c->update();
 		else
 		{
-			onRemove(c);
-
+			c->sendWillMessage();
+			
 			sMQTTRemoveClientEvent event(c);
 			onEvent(&event);
 
@@ -111,12 +131,7 @@ void sMQTTBroker::publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *
 {
 	sMQTTPublicClientEvent event(client,std::string(topic->Name()));
 	if(topic->Payload())
-	{
-		onPublish(client,std::string(topic->Name()),std::string(topic->Payload()));
 		event.setPayload(std::string(topic->Payload()));
-	}
-	else
-		onPublish(client,std::string(topic->Name()), std::string());
 
 	onEvent(&event);
 

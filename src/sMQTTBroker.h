@@ -12,33 +12,32 @@ Main class
 class sMQTTBroker
 {
 public:
-	/*! setup broker \param port set listen port \param checkWifiConnection enable/disable notify wifi connection in onEvent*/
+	sMQTTBroker(unsigned char _version);
+	/*! setup broker
+	\param[in] port mqtt connect port
+	\param[in] checkWifiConnection - if True send event if connection lost
+	\return True if no error
+	*/
 	bool init(unsigned short port, bool checkWifiConnection=false);
 	/*! call in loop function*/
 	void update();
 	/*! publish message
-		\param topic name of topic
-		\param payload
-		\param qos
-		\param retain
+	\param[in] topic name topic
+	\param[in] payload data
+	\param[in] qos default 0
+	\param[in] retain default False
+	\return Nothing
 	*/
 	void publish(const std::string &topic, const std::string &payload,unsigned char qos=0,bool retain=false);
 	//! restart WIFI server
 	void restart();
-	//! receive event from broker \param event
-	virtual bool onEvent(sMQTTEvent *event) { return true; }
-
-	//! receive retained topic count
-	unsigned long getRetainedTopicCount();
-	//! receive topic name by index \param index index of topic
-	std::string getRetaiedTopicName(unsigned long index);
-
-	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
-	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
-	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
 private:
-	// inner function
-	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
+  //! receive event from broker
+	//! \param[in] event Some event from broker
+	//! \return True - process, False - error
+	virtual bool onEvent(sMQTTEvent *event) = 0;
+  
+  void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
 
 	bool subscribe(sMQTTClient *client, const char *topic);
 	void unsubscribe(sMQTTClient *client, const char *topic);
@@ -47,7 +46,7 @@ private:
 	void updateRetainedTopic(sMQTTTopic *topic);
 
 	bool isClientConnected(sMQTTClient *client);
-
+  
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
@@ -55,5 +54,12 @@ private:
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
 	friend class sMQTTClient;
+};
+//! Simple mqtt broker if you don't need receive event
+class sMQTTSimpleBroker final: public sMQTTBroker
+{
+public:
+	sMQTTSimpleBroker(unsigned char version):sMQTTBroker(version){}
+	bool onEvent(sMQTTEvent *event) override {return true;}	
 };
 #endif

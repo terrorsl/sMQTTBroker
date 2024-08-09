@@ -1,5 +1,5 @@
-#include "sMQTTMessage.h"
-#include "sMQTTBroker.h"
+#include"sMQTTMessage.h"
+#include"sMQTTBroker.h"
 
 sMQTTMessage::sMQTTMessage()
 {
@@ -20,6 +20,30 @@ void sMQTTMessage::reset()
 	state = FixedHeader;
 	buffer.clear();
 	size = 0;
+};
+const char *sMQTTMessage::decodeLength(const char *msg,unsigned long &size)
+{
+	unsigned char *byte=(unsigned char*)msg;
+	size=0;
+	while((*byte)&0x80!=0)
+	{
+		size+=(*byte&0x7f)*multiplyer;
+		multiplyer*=0x80;
+		byte++;
+	}
+	return msg;
+};
+const char *sMQTTMessage::get(const char *msg, unsigned long &value)
+{
+	value=(msg[0]<<24)|(msg[1]<<16)|(msg[2]<<8)|msg[3];
+	msg+=4;
+	return msg;
+};
+const char *sMQTTMessage::get(const char *msg, unsigned short &value)
+{
+	value=msg[0]<<8|msg[1];
+	msg+=2;
+	return msg;
 };
 void sMQTTMessage::incoming(char in_byte)
 {
