@@ -1,5 +1,8 @@
 #include<sMQTTBroker.h>
 
+const char* MQTT_CLIENT_USER = "user"; // username for mqtt clients. Set your own value here.
+const char* MQTT_CLIENT_PASSWORD = "password"; // password for mqtt clients. Set your own value here.
+
 class MyBroker:public sMQTTBroker
 {
 public:
@@ -10,9 +13,14 @@ public:
         case NewClient_sMQTTEventType:
             {
                 sMQTTNewClientEvent *e=(sMQTTNewClientEvent*)event;
-                e->Login();
-                e->Password();
-            }
+		            // Check username and password used for new connection
+                if ((e->Login() != MQTT_CLIENT_USER) || (e->Password() != MQTT_CLIENT_PASSWORD)) {
+                  Serial.println("Invalid username or password");  
+                  delete e;
+                  e = NULL;
+                  return false;
+                  }
+            };
             break;
         case LostConnect_sMQTTEventType:
             WiFi.reconnect();
