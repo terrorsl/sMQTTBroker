@@ -16,8 +16,6 @@ public:
 		            // Check username and password used for new connection
                 if ((e->Login() != MQTT_CLIENT_USER) || (e->Password() != MQTT_CLIENT_PASSWORD)) {
                   Serial.println("Invalid username or password");  
-                  delete e;
-                  e = NULL;
                   return false;
                   }
             };
