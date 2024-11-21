@@ -7,6 +7,21 @@ bool sMQTTBroker::init(unsigned short port, bool checkWifiConnection)
 	if (_server == 0)
 		return false;
 	_server->begin();
+	webSocket=0;
+	return true;
+};
+bool sMQTTBroker::init(unsigned short port, unsigned short web_socket_port, bool checkWifiConnection)
+{
+	isCheckWifiConnection=checkWifiConnection;
+	_server = new TCPServer(port);
+	if (_server == 0)
+		return false;
+	_server->begin();
+
+	webSocket = new WebSoketServer(web_socket_port);
+	if(webSocket==0)
+		return false;
+	webSocket->begin();
 	return true;
 };
 void sMQTTBroker::update()
@@ -27,6 +42,16 @@ void sMQTTBroker::update()
 		SMQTT_LOGD("New Client");
 		sMQTTClient *sClient = new sMQTTClient(this, client);
 		clients.push_back(sClient);
+	}
+	if(webSocket)
+	{
+		TCPClient client = webSocket->available();
+		if(client)
+		{
+			SMQTT_LOGD("New WebSocket Client");
+			sMQTTClientWebSocket *sClient = new sMQTTClientWebSocket(this, client);
+			clients.push_back(sClient);
+		}
 	}
 #endif
 	sMQTTClientList::iterator clit;

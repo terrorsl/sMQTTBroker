@@ -40,11 +40,13 @@ public:
 #endif
 #elif defined(ESP32)
 #include <WiFi.h>
+#include <esp32/sha.h>
 #ifdef SMQTT_WT32_ETH01
 #include <ETH.h>
 #endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
+#define WebSoketServer WiFiServer
 MAYBE_UNUSED static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
 #elif defined(WIO_TERMINAL)

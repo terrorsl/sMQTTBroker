@@ -14,6 +14,8 @@ class sMQTTBroker
 public:
 	/*! setup broker \param port set listen port \param checkWifiConnection enable/disable notify wifi connection in onEvent*/
 	bool init(unsigned short port, bool checkWifiConnection=false);
+
+	bool init(unsigned short port, unsigned short web_socket_port, bool checkWifiConnection=false);
 	/*! call in loop function*/
 	void update();
 	/*! publish message
@@ -47,6 +49,7 @@ private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
+	WebSoketServer *webSocket;
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
