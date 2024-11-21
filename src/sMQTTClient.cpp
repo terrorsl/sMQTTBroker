@@ -308,6 +308,10 @@ sMQTTClientWebSocket::sMQTTClientWebSocket(sMQTTBroker *parent, TCPClient &clien
 {
 	
 };
+void sMQTTClientWebSocket::write(const char* buf, size_t length)
+{
+	sendFrame(WSop_text, (uint8_t*)buf, length);
+};
 void sMQTTClientWebSocket::update()
 {
 	int len = _client.available();
@@ -497,7 +501,7 @@ void sMQTTClientWebSocket::handleHeader(String *header)
             //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader] handshake %s", client->num, (uint8_t *)handshake.c_str());
 
             //write(client, (uint8_t *)handshake.c_str(), handshake.length());
-			write(handshake.c_str(), handshake.length());
+			_client.write(handshake.c_str(), handshake.length());
 
             headerDone();
 
@@ -1034,4 +1038,19 @@ bool sMQTTClientWebSocket::hasMandatoryHeader(String headerName) {
 }
 void sMQTTClientWebSocket::messageReceived(WSopcode_t opcode, uint8_t * payload, size_t length, bool fin)
 {
+	switch(opcode)
+	{
+	case WSop_text:
+		for(int index=0;index<length;index++)
+		{
+			message.incoming(payload[index]);
+			if (message.type())
+			{
+				processMessage();
+				message.reset();
+				break;
+			}
+		}
+		break;
+	}
 };

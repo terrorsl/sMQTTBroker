@@ -95,6 +95,7 @@ class sMQTTClientWebSocket:public sMQTTClient
 public:
 	sMQTTClientWebSocket(sMQTTBroker *parent, TCPClient &client);
 
+	void write(const char* buf, size_t length);
 	void update();
 private:
 	void handleHeader(String *header);
