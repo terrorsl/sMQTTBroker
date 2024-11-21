@@ -330,16 +330,6 @@ void sMQTTClientWebSocket::update()
 			break;
 		}
 	}
-	/*while (_client.available()>0)
-	{
-		message.incoming(_client.read());
-		if (message.type())
-		{
-			processMessage();
-			message.reset();
-			break;
-		}
-	}
 	unsigned long currentMillis;
 #if defined(ESP8266) || defined(ESP32)
 	currentMillis = millis();
@@ -348,7 +338,7 @@ void sMQTTClientWebSocket::update()
 	{
 		SMQTT_LOGD("aliveMillis(%lu) < currentMillis(%lu)", aliveMillis, currentMillis);
 		_client.stop();
-	}*/	
+	}
 }
 void sMQTTClientWebSocket::handleHeader(String *header)
 {
@@ -458,7 +448,7 @@ void sMQTTClientWebSocket::handleHeader(String *header)
             String auth = WEBSOCKETS_STRING("Basic ");
             auth += _base64Authorization;
             if(auth != base64Authorization) {
-                //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader] HTTP Authorization failed!\n", client->num);
+                SMQTT_LOGD("[WS-Server][handleHeader] HTTP Authorization failed!\n");
                 handleAuthorizationFailed();
                 return;
             }
@@ -466,12 +456,12 @@ void sMQTTClientWebSocket::handleHeader(String *header)
 
         if(ok)
 		{
-            //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader] Websocket connection incoming.\n", client->num);
+            SMQTT_LOGD("[WS-Server][handleHeader] Websocket connection incoming.\n");
 
             // generate Sec-WebSocket-Accept key
             String sKey = acceptKey(cKey);
 
-            //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader]  - sKey: %s\n", client->num, sKey.c_str());
+            SMQTT_LOGD("[WS-Server][handleHeader]  - sKey: %s\n", sKey.c_str());
 
             status = WSC_CONNECTED;
 
@@ -498,7 +488,7 @@ void sMQTTClientWebSocket::handleHeader(String *header)
             // header end
             handshake += NEW_LINE;
 
-            //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader] handshake %s", client->num, (uint8_t *)handshake.c_str());
+            SMQTT_LOGD("[WS-Server][handleHeader] handshake %s", (uint8_t *)handshake.c_str());
 
             //write(client, (uint8_t *)handshake.c_str(), handshake.length());
 			_client.write(handshake.c_str(), handshake.length());
@@ -510,7 +500,9 @@ void sMQTTClientWebSocket::handleHeader(String *header)
 
             //runCbEvent(client->num, WStype_CONNECTED, (uint8_t *)client->cUrl.c_str(), client->cUrl.length());
 
-        } else {
+        }
+		else
+		{
             //handleNonWebsocketConnection(client);
         }
 	}
@@ -557,7 +549,7 @@ void sMQTTClientWebSocket::headerDone()
 {
     status = WSC_CONNECTED;
     cWsRXsize = 0;
-    //DEBUG_WEBSOCKETS("[WS][%d][headerDone] Header Handling Done.\n", client->num);
+    SMQTT_LOGD("[WS][headerDone] Header Handling Done.\n");
 /*#if(WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
     client->cHttpLine = "";
     handleWebsocket(client);
@@ -572,15 +564,15 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
 
     if(status != WSC_CONNECTED)
 	{
-        //DEBUG_WEBSOCKETS("[WS][%d][sendFrame] not in WSC_CONNECTED state!?\n", client->num);
+        SMQTT_LOGD("[WS][sendFrame] not in WSC_CONNECTED state!?\n");
         return false;
     }
 
-    //DEBUG_WEBSOCKETS("[WS][%d][sendFrame] ------- send message frame -------\n", client->num);
-    //DEBUG_WEBSOCKETS("[WS][%d][sendFrame] fin: %u opCode: %u mask: %u length: %u headerToPayload: %u\n", client->num, fin, opcode, client->cIsClient, length, headerToPayload);
+    SMQTT_LOGD("[WS][sendFrame] ------- send message frame -------\n");
+    SMQTT_LOGD("[WS][sendFrame] fin: %u opCode: %u mask: %u length: %u headerToPayload: %u\n", fin, opcode, cIsClient, length, headerToPayload);
 
     if(opcode == WSop_text) {
-        //DEBUG_WEBSOCKETS("[WS][%d][sendFrame] text: %s\n", client->num, (payload + (headerToPayload ? 14 : 0)));
+        SMQTT_LOGD("[WS][sendFrame] text: %s\n", (payload + (headerToPayload ? 14 : 0)));
     }
 
     uint8_t maskKey[4]                         = { 0x00, 0x00, 0x00, 0x00 };
@@ -663,18 +655,18 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         // header has be added to payload
         // payload is forced to reserved 14 Byte but we may not need all based on the length and mask settings
         // offset in payload is calculatetd 14 - headerSize
-        write((const char*)&payloadPtr[(WEBSOCKETS_MAX_HEADER_SIZE - headerSize)], (length + headerSize));
+        _client.write((const char*)&payloadPtr[(WEBSOCKETS_MAX_HEADER_SIZE - headerSize)], (length + headerSize));
     } else {
         // send header
-        write((const char*)&buffer[0], headerSize);
+        _client.write((const char*)&buffer[0], headerSize);
 
         if(payloadPtr && length > 0) {
             // send payload
-            write((const char*)&payloadPtr[0], length);
+            _client.write((const char*)&payloadPtr[0], length);
         }
     }
 
-    //DEBUG_WEBSOCKETS("[WS][%d][sendFrame] sending Frame Done (%luus).\n", client->num, (micros() - start));
+    SMQTT_LOGD("[WS][sendFrame] sending Frame Done (%luus).\n", (micros() - start));
 
 #ifdef WEBSOCKETS_USE_BIG_MEM
     if(useInternBuffer && payloadPtr) {
@@ -809,13 +801,13 @@ void sMQTTClientWebSocket::handleWebsocketCb()
         buffer += 8;
     }
 
-    //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] ------- read massage frame -------\n", client->num);
-    //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] fin: %u rsv1: %u rsv2: %u rsv3 %u  opCode: %u\n", client->num, header->fin, header->rsv1, header->rsv2, header->rsv3, header->opCode);
-    //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] mask: %u payloadLen: %u\n", client->num, header->mask, header->payloadLen);
+    SMQTT_LOGD("[WS][handleWebsocket] ------- read massage frame -------\n");
+    SMQTT_LOGD("[WS][handleWebsocket] fin: %u rsv1: %u rsv2: %u rsv3 %u  opCode: %u\n", header->fin, header->rsv1, header->rsv2, header->rsv3, header->opCode);
+    SMQTT_LOGD("[WS][handleWebsocket] mask: %u payloadLen: %u\n", header->mask, header->payloadLen);
 
     if(header->payloadLen > WEBSOCKETS_MAX_DATA_SIZE)
 	{
-        //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] payload too big! (%u)\n", client->num, header->payloadLen);
+        SMQTT_LOGD("[WS][handleWebsocket] payload too big! (%u)\n", header->payloadLen);
         clientDisconnect(1009);
         return;
     }
@@ -836,7 +828,7 @@ void sMQTTClientWebSocket::handleWebsocketCb()
         payload = (uint8_t *)malloc(header->payloadLen + 1);
 
         if(!payload) {
-            //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] to less memory to handle payload %d!\n", client->num, header->payloadLen);
+            SMQTT_LOGD("[WS][handleWebsocket] to less memory to handle payload %d!\n", header->payloadLen);
             clientDisconnect(1011);
             return;
         }
@@ -852,7 +844,7 @@ bool sMQTTClientWebSocket::handleWebsocketWaitFor(size_t size)
 {
     if(size > WEBSOCKETS_MAX_HEADER_SIZE)
 	{
-        //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocketWaitFor] size: %d too big!\n", client->num, size);
+        SMQTT_LOGD("[WS][handleWebsocketWaitFor] size: %d too big!\n", size);
         return false;
     }
 
@@ -895,7 +887,7 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
 #else*/
     unsigned long t = millis();
     ssize_t len;
-    //DEBUG_WEBSOCKETS("[readCb] n: %zu t: %lu\n", n, t);
+    SMQTT_LOGD("[readCb] n: %zu t: %lu\n", n, t);
     while(n > 0) {
         /*if(client->tcp == NULL) {
             DEBUG_WEBSOCKETS("[readCb] tcp is null!\n");
@@ -906,7 +898,7 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
         }*/
 
         if(!_client.connected()) {
-            //DEBUG_WEBSOCKETS("[readCb] not connected!\n");
+            SMQTT_LOGD("[readCb] not connected!\n");
             if(cb) {
                 cb(false);
             }
@@ -914,7 +906,7 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
         }
 
         if((millis() - t) > WEBSOCKETS_TCP_TIMEOUT) {
-            //DEBUG_WEBSOCKETS("[readCb] receive TIMEOUT! %lu\n", (millis() - t));
+            SMQTT_LOGD("[readCb] receive TIMEOUT! %lu\n", (millis() - t));
             if(cb) {
                 cb(false);
             }
@@ -932,9 +924,9 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
             t = millis();
             out += len;
             n -= len;
-            // DEBUG_WEBSOCKETS("Receive %d left %d!\n", len, n);
+            SMQTT_LOGD("Receive %d left %d!\n", len, n);
         } else {
-            // DEBUG_WEBSOCKETS("Receive %d left %d!\n", len, n);
+			SMQTT_LOGD("Receive %d left %d!\n", len, n);
         }
         if(n > 0) {
             WEBSOCKETS_YIELD();
@@ -966,7 +958,7 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
 
         switch(header->opCode) {
             case WSop_text:
-                //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] text: %s\n", client->num, payload);
+                SMQTT_LOGD("[WS][handleWebsocket] text: %s\n", payload);
                 // fallthrough
             case WSop_binary:
             case WSop_continuation:
@@ -974,12 +966,12 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
                 break;
             case WSop_ping:
                 // send pong back
-                //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] ping received (%s)\n", client->num, payload ? (const char *)payload : "");
+                SMQTT_LOGD("[WS][handleWebsocket] ping received (%s)\n", payload ? (const char *)payload : "");
                 sendFrame(WSop_pong, payload, header->payloadLen);
                 messageReceived(header->opCode, payload, header->payloadLen, header->fin);
                 break;
             case WSop_pong:
-                //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] get pong (%s)\n", client->num, payload ? (const char *)payload : "");
+                SMQTT_LOGD("[WS][handleWebsocket] get pong (%s)\n", payload ? (const char *)payload : "");
                 //pongReceived = true;
                 //messageReceived(header->opCode, payload, header->payloadLen, header->fin);
                 break;
@@ -990,16 +982,16 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
                     reasonCode = payload[0] << 8 | payload[1];
                 }
 #endif
-                //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] get ask for close. Code: %d\n", client->num, reasonCode);
+                SMQTT_LOGD("[WS][handleWebsocket] get ask for close. Code: %d\n", reasonCode);
                 if(header->payloadLen > 2) {
-                    //DEBUG_WEBSOCKETS(" (%s)\n", (payload + 2));
+                    SMQTT_LOGD(" (%s)\n", (payload + 2));
                 } else {
-                    //DEBUG_WEBSOCKETS("\n");
+                    SMQTT_LOGD("\n");
                 }
                 clientDisconnect(1000);
             } break;
             default:
-                //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] got unknown opcode: %d\n", client->num, header->opCode);
+                SMQTT_LOGD("[WS][handleWebsocket] got unknown opcode: %d\n", header->opCode);
                 clientDisconnect(1002);
                 break;
         }
@@ -1017,7 +1009,7 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
     }
 	else
 	{
-        //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocket] missing data!\n", client->num);
+        SMQTT_LOGD("[WS][handleWebsocket] missing data!\n");
         free(payload);
         clientDisconnect(1002);
     }
