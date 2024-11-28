@@ -49,7 +49,7 @@ private:
 	void findRetainTopic(sMQTTTopic *topic, sMQTTClient *client);
 
 	TCPServer *_server;
-	WebSoketServer *webSocket;
+	WebSocketServer *webSocket;
 	sMQTTClientList clients;
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;

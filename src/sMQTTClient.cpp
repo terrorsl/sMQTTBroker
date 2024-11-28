@@ -853,7 +853,7 @@ bool sMQTTClientWebSocket::handleWebsocketWaitFor(size_t size)
         return true;
     }
 
-    //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocketWaitFor] size: %d cWsRXsize: %d\n", client->num, size, client->cWsRXsize);
+    SMQTT_LOGD("[WS][handleWebsocketWaitFor] size: %d cWsRXsize: %d\n", size, cWsRXsize);
     /*readCb(&cWsHeader[cWsRXsize], (size - cWsRXsize), std::bind([](WebSockets * server, size_t size, WSclient_t * client, bool ok) {
         //DEBUG_WEBSOCKETS("[WS][%d][handleWebsocketWaitFor][readCb] size: %d ok: %d\n", client->num, size, ok);
         if(ok) {

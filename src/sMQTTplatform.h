@@ -33,6 +33,7 @@ public:
 #include <ESP8266WiFi.h>
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
+#define WebSocketServer WiFiServer
 #if defined(DEBUG_ESP_PORT)
 #define SMQTT_LOGD(...) DEBUG_ESP_PORT.printf(__VA_ARGS__)
 #else
@@ -46,7 +47,7 @@ public:
 #endif
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
-#define WebSoketServer WiFiServer
+#define WebSocketServer WiFiServer
 MAYBE_UNUSED static const char *SMQTTTAG = "sMQTTBroker";
 #define SMQTT_LOGD(...) ESP_LOGD(SMQTTTAG,__VA_ARGS__)
 #elif defined(WIO_TERMINAL)
@@ -55,6 +56,7 @@ MAYBE_UNUSED static const char *SMQTTTAG = "sMQTTBroker";
 #include <WiFiServer.h>
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
+#define WebSocketServer WiFiServer
 #define SMQTT_LOGD(...)
 #else
 #error "unknown platform"
