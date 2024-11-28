@@ -31,6 +31,8 @@ public:
 #define SMQTT_LOGD
 #elif defined(ESP8266)
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <hash.h>
 #define TCPClient WiFiClient
 #define TCPServer WiFiServer
 #define WebSocketServer WiFiServer

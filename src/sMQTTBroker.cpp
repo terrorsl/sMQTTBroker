@@ -18,7 +18,7 @@ bool sMQTTBroker::init(unsigned short port, unsigned short web_socket_port, bool
 		return false;
 	_server->begin();
 
-	webSocket = new WebSoketServer(web_socket_port);
+	webSocket = new WebSocketServer(web_socket_port);
 	if(webSocket==0)
 		return false;
 	webSocket->begin();
