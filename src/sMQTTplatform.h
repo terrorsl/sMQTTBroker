@@ -43,7 +43,8 @@ public:
 #endif
 #elif defined(ESP32)
 #include <WiFi.h>
-#include <esp32/sha.h>
+//#include <esp32/sha.h>
+#include <sha/sha_parallel_engine.h>
 #ifdef SMQTT_WT32_ETH01
 #include <ETH.h>
 #endif

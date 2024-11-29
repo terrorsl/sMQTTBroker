@@ -1,4 +1,5 @@
 #include "sMQTTBroker.h"
+#include <libb64/cencode.h>
 
 #include <functional>
 
@@ -512,7 +513,7 @@ String sMQTTClientWebSocket::base64_encode(uint8_t * data, size_t length)
     size_t size   = ((length * 1.6f) + 1);
     size          = std::max(size, (size_t)5);    // minimum buffer size
     char * buffer = (char *)malloc(size);
-    /*if(buffer) {
+    if(buffer) {
         base64_encodestate _state;
         base64_init_encodestate(&_state);
         int len = base64_encode_block((const char *)&data[0], length, &buffer[0], &_state);
@@ -521,7 +522,7 @@ String sMQTTClientWebSocket::base64_encode(uint8_t * data, size_t length)
         String base64 = String(buffer);
         free(buffer);
         return base64;
-    }*/
+    }
     return String("-FAIL-");
 }
 String sMQTTClientWebSocket::acceptKey(String & clientKey)
@@ -961,6 +962,7 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
                 SMQTT_LOGD("[WS][handleWebsocket] text: %s\n", payload);
                 // fallthrough
             case WSop_binary:
+                SMQTT_LOGD("[WS][handleWebsocket] binary\n");
             case WSop_continuation:
                 messageReceived(header->opCode, payload, header->payloadLen, header->fin);
                 break;
