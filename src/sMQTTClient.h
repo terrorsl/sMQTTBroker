@@ -107,7 +107,7 @@ private:
 	bool handleWebsocketWaitFor(size_t size);
 	bool readCb(uint8_t * out, size_t n, WSreadWaitCb cb);
 	void handleWebsocketPayloadCb(bool ok, uint8_t * payload);
-	void clientDisconnect(uint16_t code, char * reason = NULL, size_t reasonLen = 0);
+	void clientDisconnect(uint16_t code, char * reason = NULL, size_t reasonLen = 0){};
 	void handleWebsocket();
 
 	String acceptKey(String & clientKey);
