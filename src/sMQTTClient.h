@@ -126,6 +126,7 @@ private:
             "This Websocket server requires Authorization!");
         //clientDisconnect();
     }
+	void handleNonWebsocketConnection();
 
 	bool execHttpHeaderValidation(String headerName, String headerValue) {
         /*if(_httpHeaderValidationFunc) {
@@ -143,8 +144,8 @@ private:
 	bool cIsWebsocket;
 	int cVersion;
 	String base64Authorization, _base64Authorization;
-	String cUrl, cKey, cProtocol, cExtensions;
-	bool cIsClient;
+	String cUrl, cKey, cProtocol, cExtensions, cSessionId;
+	bool cIsClient, isSocketIO;
 
 	int cWsRXsize; ///< State of the RX
     uint8_t cWsHeader[WEBSOCKETS_MAX_HEADER_SIZE];    ///< RX WS Message buffer

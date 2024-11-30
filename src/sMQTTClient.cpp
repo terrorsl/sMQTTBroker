@@ -307,25 +307,36 @@ void sMQTTClient::updateLiveStatus()
 
 sMQTTClientWebSocket::sMQTTClientWebSocket(sMQTTBroker *parent, TCPClient &client):sMQTTClient(parent, client), status(WSC_HEADER)
 {
-	
+	_mandatoryHttpHeaderCount=0;
+    isSocketIO=false;
 };
 void sMQTTClientWebSocket::write(const char* buf, size_t length)
 {
-	sendFrame(WSop_text, (uint8_t*)buf, length);
+	sendFrame(WSop_binary, (uint8_t*)buf, length);
 };
 void sMQTTClientWebSocket::update()
 {
 	int len = _client.available();
 	if(len)
 	{
+        SMQTT_LOGD("%d",len);
 		switch(status)
 		{
 		case WSC_HEADER:
 			{
 				String header = _client.readStringUntil('\n');
+                SMQTT_LOGD("%s", header.c_str());
 				handleHeader(&header);
 			}
 			break;
+        case WSC_BODY:
+            {
+                char buf[256] = { 0 };
+                _client.readBytes(&buf[0], std::min((size_t)len, sizeof(buf)));
+                String bodyLine = buf;
+                handleHeader(&bodyLine);
+            }
+            break;
 		case WSC_CONNECTED:
 			handleWebsocket();
 			break;
@@ -345,105 +356,98 @@ void sMQTTClientWebSocket::handleHeader(String *header)
 {
 	static const char * NEW_LINE = "\r\n";
 	header->trim();
+
 	if(header->length())
 	{
-		// websocket requests always start with GET see rfc6455
-        if(header->startsWith("GET "))
-		{
-			// cut URL out
+        SMQTT_LOGD("[WS-Server][handleHeader] RX: %s\n", header->c_str());
+
+// websocket requests always start with GET see rfc6455
+        if(header->startsWith("GET ")) {
+            // cut URL out
             cUrl = header->substring(4, header->indexOf(' ', 4));
 
             // reset non-websocket http header validation state for this client
-            cHttpHeadersValid = true;
+            cHttpHeadersValid      = true;
             cMandatoryHeadersCount = 0;
-		}
-		else
-		{
-			if(header->indexOf(':') >= 0)
-			{
-				String headerName  = header->substring(0, header->indexOf(':'));
-            	String headerValue = header->substring(header->indexOf(':') + 1);
 
-            	// remove space in the beginning (RFC2616)
-            	if(headerValue[0] == ' ')
-				{
-                	headerValue.remove(0, 1);
-            	}
+        } else if(header->indexOf(':') >= 0) {
+            String headerName  = header->substring(0, header->indexOf(':'));
+            String headerValue = header->substring(header->indexOf(':') + 1);
 
-            	if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Connection")))
-				{
-                	headerValue.toLowerCase();
-					if(headerValue.indexOf(WEBSOCKETS_STRING("upgrade")) >= 0) {
-						cIsUpgrade = true;
-					}
-            	}
-				else
-					if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Upgrade")))
-					{
-                		if(headerValue.equalsIgnoreCase(WEBSOCKETS_STRING("websocket")))
-						{
-                    		cIsWebsocket = true;
-                		}
-            		}
-					else
-						if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Version")))
-						{
-                			cVersion = headerValue.toInt();
-            			}
-						else
-							if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Key")))
-							{
-                				cKey = headerValue;
-                				cKey.trim();    // see rfc6455
-            				}
-							else
-								if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Protocol")))
-								{
-                					cProtocol = headerValue;
-            					}
-								else
-									if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Extensions")))
-									{
-                						cExtensions = headerValue;
-            						}
-									else
-										if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Authorization")))
-										{
-                							base64Authorization = headerValue;
-            							}
-										else
-										{
-                							cHttpHeadersValid &= execHttpHeaderValidation(headerName, headerValue);
-                							if(_mandatoryHttpHeaderCount > 0 && hasMandatoryHeader(headerName))
-											{
-                    							cMandatoryHeadersCount++;
-                							}
-            							}
-			}
-		}
+            // remove space in the beginning (RFC2616)
+            if(headerValue[0] == ' ') {
+                headerValue.remove(0, 1);
+            }
+
+            if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Connection"))) {
+                headerValue.toLowerCase();
+                if(headerValue.indexOf(WEBSOCKETS_STRING("upgrade")) >= 0) {
+                    cIsUpgrade = true;
+                }
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Upgrade"))) {
+                if(headerValue.equalsIgnoreCase(WEBSOCKETS_STRING("websocket"))) {
+                    cIsWebsocket = true;
+                }
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Version"))) {
+                cVersion = headerValue.toInt();
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Key"))) {
+                cKey = headerValue;
+                cKey.trim();    // see rfc6455
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Protocol"))) {
+                cProtocol = headerValue;
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Sec-WebSocket-Extensions"))) {
+                cExtensions = headerValue;
+            } else if(headerName.equalsIgnoreCase(WEBSOCKETS_STRING("Authorization"))) {
+                base64Authorization = headerValue;
+            } else {
+                cHttpHeadersValid &= execHttpHeaderValidation(headerName, headerValue);
+                if(_mandatoryHttpHeaderCount > 0 && hasMandatoryHeader(headerName)) {
+                    cMandatoryHeadersCount++;
+                }
+            }
+
+        } else {
+            SMQTT_LOGD("[WS-Server][handleHeader] Header error (%s)", header->c_str());
+        }
 	}
 	else
 	{
-		bool ok = (cIsUpgrade && cIsWebsocket);
+        SMQTT_LOGD("[WS-Server][handleHeader] Header read fin.");
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cURL: %s", cUrl.c_str());
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cIsUpgrade: %d", cIsUpgrade);
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cIsWebsocket: %d", cIsWebsocket);
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cKey: %s", cKey.c_str());
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cProtocol: %s", cProtocol.c_str());
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cExtensions: %s", cExtensions.c_str());
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cVersion: %d", cVersion);
+        SMQTT_LOGD("[WS-Server][handleHeader]  - base64Authorization: %s", base64Authorization.c_str());
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cHttpHeadersValid: %d", cHttpHeadersValid);
+        SMQTT_LOGD("[WS-Server][handleHeader]  - cMandatoryHeadersCount: %d", cMandatoryHeadersCount);
 
+		bool ok = (cIsUpgrade && cIsWebsocket);
+        
         if(ok) {
             if(cUrl.length() == 0) {
                 ok = false;
+                SMQTT_LOGD("cUrl.length()");
             }
             if(cKey.length() == 0) {
                 ok = false;
+                SMQTT_LOGD("cKey.length()");
             }
             if(cVersion != 13) {
                 ok = false;
+                SMQTT_LOGD("cVersion");
             }
             if(!cHttpHeadersValid) {
                 ok = false;
+                SMQTT_LOGD("cHttpHeadersValid");
             }
             if(cMandatoryHeadersCount != _mandatoryHttpHeaderCount) {
                 ok = false;
+                SMQTT_LOGD("cMandatoryHeadersCount %d %d",cMandatoryHeadersCount,_mandatoryHttpHeaderCount);
             }
         }
-
         if(_base64Authorization.length() > 0)
 		{
             String auth = WEBSOCKETS_STRING("Basic ");
@@ -462,7 +466,7 @@ void sMQTTClientWebSocket::handleHeader(String *header)
             // generate Sec-WebSocket-Accept key
             String sKey = acceptKey(cKey);
 
-            SMQTT_LOGD("[WS-Server][handleHeader]  - sKey: %s\n", sKey.c_str());
+            //SMQTT_LOGD("[WS-Server][handleHeader]  - sKey: %s\n", sKey.c_str());
 
             status = WSC_CONNECTED;
 
@@ -481,7 +485,7 @@ void sMQTTClientWebSocket::handleHeader(String *header)
             }*/
 
             if(cProtocol.length() > 0) {
-				String _protocol("arduino");
+				String _protocol("mqtt");
                 handshake += WEBSOCKETS_STRING("Sec-WebSocket-Protocol: ");
                 handshake += _protocol + NEW_LINE;
             }
@@ -504,10 +508,23 @@ void sMQTTClientWebSocket::handleHeader(String *header)
         }
 		else
 		{
-            //handleNonWebsocketConnection(client);
+            handleNonWebsocketConnection();
         }
 	}
 };
+void sMQTTClientWebSocket::handleNonWebsocketConnection() {
+        //DEBUG_WEBSOCKETS("[WS-Server][%d][handleHeader] no Websocket connection close.\n", client->num);
+        _client.write(
+            "HTTP/1.1 400 Bad Request\r\n"
+            "Server: arduino-WebSocket-Server\r\n"
+            "Content-Type: text/plain\r\n"
+            "Content-Length: 32\r\n"
+            "Connection: close\r\n"
+            "Sec-WebSocket-Version: 13\r\n"
+            "\r\n"
+            "This is a Websocket server only!");
+        //clientDisconnect(client);
+    }
 String sMQTTClientWebSocket::base64_encode(uint8_t * data, size_t length)
 {
     size_t size   = ((length * 1.6f) + 1);
@@ -659,11 +676,13 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         _client.write((const char*)&payloadPtr[(WEBSOCKETS_MAX_HEADER_SIZE - headerSize)], (length + headerSize));
     } else {
         // send header
-        _client.write((const char*)&buffer[0], headerSize);
+        //_client.write((const char*)&buffer[0], headerSize);
+        _client.write(buffer, headerSize);
 
         if(payloadPtr && length > 0) {
             // send payload
-            _client.write((const char*)&payloadPtr[0], length);
+            //_client.write((const char*)&payloadPtr[0], length);
+            _client.write(payloadPtr, length);
         }
     }
 
@@ -834,7 +853,10 @@ void sMQTTClientWebSocket::handleWebsocketCb()
             return;
         }
         //readCb(payload, header->payloadLen, std::bind(&sMQTTClientWebSocket::handleWebsocketPayloadCb, std::placeholders::_1, payload));
-		readCb(payload, header->payloadLen,0);
+		if(readCb(payload, header->payloadLen,0))
+        {
+            handleWebsocketPayloadCb(true, payload);
+        }
     }
 	else
 	{
@@ -868,7 +890,11 @@ bool sMQTTClientWebSocket::handleWebsocketWaitFor(size_t size)
         }
     },
                                                                                           this, size, std::placeholders::_1, std::placeholders::_2));*/
-	readCb(&cWsHeader[cWsRXsize], (size - cWsRXsize),0);	
+	if(readCb(&cWsHeader[cWsRXsize], (size - cWsRXsize),0))
+    {
+        cWsRXsize = size;
+        handleWebsocketCb();
+    }
     return false;
 }
 bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
@@ -888,7 +914,7 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
 #else*/
     unsigned long t = millis();
     ssize_t len;
-    SMQTT_LOGD("[readCb] n: %zu t: %lu\n", n, t);
+    //SMQTT_LOGD("[readCb] n: %zu t: %lu\n", n, t);
     while(n > 0) {
         /*if(client->tcp == NULL) {
             DEBUG_WEBSOCKETS("[readCb] tcp is null!\n");
@@ -925,9 +951,9 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
             t = millis();
             out += len;
             n -= len;
-            SMQTT_LOGD("Receive %d left %d!\n", len, n);
+           // SMQTT_LOGD("Receive %d left %d!\n", len, n);
         } else {
-			SMQTT_LOGD("Receive %d left %d!\n", len, n);
+			//SMQTT_LOGD("Receive %d left %d!\n", len, n);
         }
         if(n > 0) {
             WEBSOCKETS_YIELD();
@@ -1004,10 +1030,10 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
 
         // reset input
         cWsRXsize = 0;
-#if(WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
+/*#if(WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
         // register callback for next message
         handleWebsocketWaitFor(2);
-#endif
+#endif*/
     }
 	else
 	{
@@ -1032,12 +1058,14 @@ bool sMQTTClientWebSocket::hasMandatoryHeader(String headerName) {
 }
 void sMQTTClientWebSocket::messageReceived(WSopcode_t opcode, uint8_t * payload, size_t length, bool fin)
 {
+    SMQTT_LOGD("opcode:%d length:%d", opcode, length);
 	switch(opcode)
 	{
-	case WSop_text:
+	case WSop_binary:
 		for(int index=0;index<length;index++)
 		{
 			message.incoming(payload[index]);
+            SMQTT_LOGD("payload:%c", payload[index]);
 			if (message.type())
 			{
 				processMessage();
