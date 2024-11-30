@@ -117,7 +117,7 @@ void sMQTTClient::processMessage()
 				if (_parent->isClientConnected(this) == false)
 				{
 					sMQTTNewClientEvent event(this, username, password);
-					if(_parent->onEvent(&event)==false || _parent->onConnect(this, username, password) == false)
+					if(_parent->onEvent(&event)==false)
 						status = sMQTTConnReturnBadUsernameOrPassword;
 				}
 				else

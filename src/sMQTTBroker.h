@@ -26,16 +26,12 @@ public:
 	//! restart WIFI server
 	void restart();
 	//! receive event from broker \param event
-	virtual bool onEvent(sMQTTEvent *event) { return true; }
+	virtual bool onEvent(sMQTTEvent *event) = 0;
 
 	//! receive retained topic count
 	unsigned long getRetainedTopicCount();
 	//! receive topic name by index \param index index of topic
 	std::string getRetaiedTopicName(unsigned long index);
-
-	SMQTT_DEPRECATED("onConnect is deprecated, use onEvent") virtual bool onConnect(sMQTTClient *client, const std::string &username, const std::string &password) { return true; };
-	SMQTT_DEPRECATED("onRemove is deprecated, use onEvent") virtual void onRemove(sMQTTClient*) {};
-	SMQTT_DEPRECATED("onPublish is deprecated, use onEvent") virtual void onPublish(sMQTTClient *client, const std::string &topic, const std::string &payload) {};
 private:
 	// inner function
 	void publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *msg);
@@ -55,5 +51,11 @@ private:
 	sMQTTTopicList subscribes, retains;
 	bool isCheckWifiConnection;
 	friend class sMQTTClient;
+};
+
+class sMQTTBrokerWithoutEvent:public sMQTTBroker
+{
+public:
+	bool onEvent(sMQTTEvent *event) { return true; }
 };
 #endif
