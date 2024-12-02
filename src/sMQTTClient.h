@@ -107,7 +107,25 @@ private:
 	bool handleWebsocketWaitFor(size_t size);
 	bool readCb(uint8_t * out, size_t n, WSreadWaitCb cb);
 	void handleWebsocketPayloadCb(bool ok, uint8_t * payload);
-	void clientDisconnect(uint16_t code, char * reason = NULL, size_t reasonLen = 0){};
+	void clientDisconnect(uint16_t code, char * reason = NULL, size_t reasonLen = 0){
+		SMQTT_LOGD("[WS][handleWebsocket] clientDisconnect code: %u\n", code);
+		if(status == WSC_CONNECTED && code)
+		{
+			if(reason)
+			{
+            	sendFrame(WSop_close, (uint8_t *)reason, reasonLen);
+        	} else {
+				uint8_t buffer[2];
+				buffer[0] = ((code >> 8) & 0xFF);
+				buffer[1] = (code & 0xFF);
+				sendFrame(WSop_close, &buffer[0], 2);
+        	}
+    	}
+		_client.stop();
+	};
+	void handleHBPing(){
+		
+	}
 	void handleWebsocket();
 
 	String acceptKey(String & clientKey);
