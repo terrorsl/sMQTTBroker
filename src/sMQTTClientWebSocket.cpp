@@ -16,13 +16,11 @@ void sMQTTClientWebSocket::update()
 	int len = _client.available();
 	if(len)
 	{
-        //SMQTT_LOGD("%d",len);
 		switch(status)
 		{
 		case WSC_HEADER:
 			{
 				String header = _client.readStringUntil('\n');
-                //SMQTT_LOGD("%s", header.c_str());
 				handleHeader(&header);
 			}
 			break;
@@ -197,16 +195,12 @@ void sMQTTClientWebSocket::handleHeader(String *header)
 
             SMQTT_LOGD("[WS-Server][handleHeader] handshake %s", (uint8_t *)handshake.c_str());
 
-            //write(client, (uint8_t *)handshake.c_str(), handshake.length());
 			_client.write(handshake.c_str(), handshake.length());
 
             headerDone();
 
             // send ping
             sendFrame(WSop_ping);
-
-            //runCbEvent(client->num, WStype_CONNECTED, (uint8_t *)client->cUrl.c_str(), client->cUrl.length());
-
         }
 		else
 		{
@@ -225,6 +219,7 @@ void sMQTTClientWebSocket::handleNonWebsocketConnection() {
             "Sec-WebSocket-Version: 13\r\n"
             "\r\n"
             "This is a Websocket server only!");
+        _client.stop();
         //clientDisconnect(client);
     }
 String sMQTTClientWebSocket::base64_encode(uint8_t * data, size_t length)
@@ -270,18 +265,9 @@ void sMQTTClientWebSocket::headerDone()
     status = WSC_CONNECTED;
     cWsRXsize = 0;
     SMQTT_LOGD("[WS][headerDone] Header Handling Done.");
-/*#if(WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
-    client->cHttpLine = "";
-    handleWebsocket(client);
-#endif*/
 }
 bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_t length, bool fin, bool headerToPayload)
 {
-    /*if(client->tcp && !client->tcp->connected()) {
-        DEBUG_WEBSOCKETS("[WS][%d][sendFrame] not Connected!?\n", client->num);
-        return false;
-    }*/
-
     if(status != WSC_CONNECTED)
 	{
         SMQTT_LOGD("[WS][sendFrame] not in WSC_CONNECTED state!?");
@@ -295,7 +281,6 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         SMQTT_LOGD("[WS][sendFrame] text: %s", (payload + (headerToPayload ? 14 : 0)));
     }
 
-    uint8_t maskKey[4]                         = { 0x00, 0x00, 0x00, 0x00 };
     uint8_t buffer[WEBSOCKETS_MAX_HEADER_SIZE] = { 0 };
 
     uint8_t headerSize;
@@ -313,26 +298,6 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         headerSize = 10;
     }
 
-    if(cIsClient)
-	{
-        headerSize += 4;
-    }
-
-#ifdef WEBSOCKETS_USE_BIG_MEM
-    // only for ESP since AVR has less HEAP
-    // try to send data in one TCP package (only if some free Heap is there)
-    if(!headerToPayload && ((length > 0) && (length < 1400)) && (GET_FREE_HEAP > 6000)) {
-        DEBUG_WEBSOCKETS("[WS][%d][sendFrame] pack to one TCP package...\n", client->num);
-        uint8_t * dataPtr = (uint8_t *)malloc(length + WEBSOCKETS_MAX_HEADER_SIZE);
-        if(dataPtr) {
-            memcpy((dataPtr + WEBSOCKETS_MAX_HEADER_SIZE), payload, length);
-            headerToPayload = true;
-            useInternBuffer = true;
-            payloadPtr      = dataPtr;
-        }
-    }
-#endif
-
     // set Header Pointer
     if(headerToPayload) {
         // calculate offset in payload
@@ -341,31 +306,7 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         headerPtr = &buffer[0];
     }
 
-    if(cIsClient && useInternBuffer)
-	{
-        // if we use a Intern Buffer we can modify the data
-        // by this fact its possible the do the masking
-        for(uint8_t x = 0; x < sizeof(maskKey); x++) {
-            maskKey[x] = random(0xFF);
-        }
-    }
-
-    createHeader(headerPtr, opcode, length, cIsClient, maskKey, fin);
-
-    if(cIsClient && useInternBuffer)
-	{
-        uint8_t * dataMaskPtr;
-
-        if(headerToPayload) {
-            dataMaskPtr = (payloadPtr + WEBSOCKETS_MAX_HEADER_SIZE);
-        } else {
-            dataMaskPtr = payloadPtr;
-        }
-
-        for(size_t x = 0; x < length; x++) {
-            dataMaskPtr[x] = (dataMaskPtr[x] ^ maskKey[x % 4]);
-        }
-    }
+    createHeader(headerPtr, opcode, length, fin);
 
 #ifndef NODEBUG_WEBSOCKETS
     unsigned long start = micros();
@@ -378,27 +319,18 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
         _client.write((const char*)&payloadPtr[(WEBSOCKETS_MAX_HEADER_SIZE - headerSize)], (length + headerSize));
     } else {
         // send header
-        //_client.write((const char*)&buffer[0], headerSize);
         _client.write(buffer, headerSize);
 
         if(payloadPtr && length > 0) {
             // send payload
-            //_client.write((const char*)&payloadPtr[0], length);
             _client.write(payloadPtr, length);
         }
     }
 
     SMQTT_LOGD("[WS][sendFrame] sending Frame Done (%luus).", (micros() - start));
-
-#ifdef WEBSOCKETS_USE_BIG_MEM
-    if(useInternBuffer && payloadPtr) {
-        free(payloadPtr);
-    }
-#endif
-
     return ret;
 }
-uint8_t sMQTTClientWebSocket::createHeader(uint8_t * headerPtr, WSopcode_t opcode, size_t length, bool mask, uint8_t maskKey[4], bool fin)
+uint8_t sMQTTClientWebSocket::createHeader(uint8_t * headerPtr, WSopcode_t opcode, size_t length, bool fin)
 {
     uint8_t headerSize;
     // calculate header Size
@@ -408,10 +340,6 @@ uint8_t sMQTTClientWebSocket::createHeader(uint8_t * headerPtr, WSopcode_t opcod
         headerSize = 4;
     } else {
         headerSize = 10;
-    }
-
-    if(mask) {
-        headerSize += 4;
     }
 
     // create header
@@ -426,10 +354,7 @@ uint8_t sMQTTClientWebSocket::createHeader(uint8_t * headerPtr, WSopcode_t opcod
 
     // byte 1
     *headerPtr = 0x00;
-    if(mask) {
-        *headerPtr |= bit(7);    ///< set mask
-    }
-
+    
     if(length < 126) {
         *headerPtr |= length;
         headerPtr++;
@@ -459,17 +384,6 @@ uint8_t sMQTTClientWebSocket::createHeader(uint8_t * headerPtr, WSopcode_t opcod
         *headerPtr = ((length >> 8) & 0xFF);
         headerPtr++;
         *headerPtr = (length & 0xFF);
-        headerPtr++;
-    }
-
-    if(mask) {
-        *headerPtr = maskKey[0];
-        headerPtr++;
-        *headerPtr = maskKey[1];
-        headerPtr++;
-        *headerPtr = maskKey[2];
-        headerPtr++;
-        *headerPtr = maskKey[3];
         headerPtr++;
     }
     return headerSize;
@@ -722,10 +636,6 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
 
         // reset input
         cWsRXsize = 0;
-/*#if(WEBSOCKETS_NETWORK_TYPE == NETWORK_ESP8266_ASYNC)
-        // register callback for next message
-        handleWebsocketWaitFor(2);
-#endif*/
     }
 	else
 	{

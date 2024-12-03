@@ -53,7 +53,7 @@ private:
 	void handleHeader(String *header);
 	void headerDone();
 	bool sendFrame(WSopcode_t opcode, uint8_t * payload=0, size_t length=0, bool fin=true, bool headerToPayload=false);
-	uint8_t createHeader(uint8_t * headerPtr, WSopcode_t opcode, size_t length, bool mask, uint8_t maskKey[4], bool fin);
+	uint8_t createHeader(uint8_t * headerPtr, WSopcode_t opcode, size_t length, bool fin);
 
 	void handleWebsocketCb();
 	bool handleWebsocketWaitFor(size_t size);
