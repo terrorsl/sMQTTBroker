@@ -19,6 +19,38 @@ typedef enum {
                                  ///< %xB-F are reserved for further control frames
 } WSopcode_t;
 
+typedef enum{
+    WSerror_close_normal = 1000,
+    //1001 indicates that an endpoint is "going away", such as a server going down or a browser having navigated away from a page.
+    WSerror_close_going_away,
+    //1002 indicates that an endpoint is terminating the connection due to a protocol error.
+    WSerror_close_protocol_error,
+    //1003 indicates that an endpoint is terminating the connection because it has received a type of data it cannot accept (e.g., an endpoint that understands only text data MAY send this if it receives a binary message).
+    WSerror_close_unsupported,
+    //1005 is a reserved value and MUST NOT be set as a status code in a Close control frame by an endpoint. It is designated for use in applications expecting a status code to indicate that no status code was actually present.
+    WSerror_closed_no_status=1005,
+    //1006 is a reserved value and MUST NOT be set as a status code in a Close control frame by an endpoint. It is designated for use in applications expecting a status code to indicate that the connection was closed abnormally, e.g., without sending or receiving a Close control frame.
+    WSerror_close_abnormal,
+    //1007 indicates that an endpoint is terminating the connection because it has received data within a message that was not consistent with the type of the message (e.g., non-UTF-8 [RFC3629] data within a text message).
+    WSerror_unsupported_payload,
+    //1008 indicates that an endpoint is terminating the connection because it has received a message that violates its policy. This is a generic status code that can be returned when there is no other more suitable status code (e.g., 1003 or 1009) or if there is a need to hide specific details about the policy.
+    WSerror_violation,
+    //1009 indicates that an endpoint is terminating the connection because it has received a message that is too big for it to process.
+    WSerror_messsage_too_big,
+    //1010 indicates that an endpoint (client) is terminating the connection because it has expected the server to negotiate one or more extension, but the server didn't return them in the response message of the WebSocket handshake. The list of extensions that are needed SHOULD appear in the /reason/ part of the Close frame. Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
+    WSerror_mandatory_extension,
+    //1011 indicates that a server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.
+    WSerror_server_error,
+    //1012 indicates that the server / service is restarting.
+    WSerror_service_restart,
+    //1013 indicates that a temporary server condition forced blocking the client's request.
+    WSerror_try_again_later,
+    //1014 indicates that the server acting as gateway received an invalid response
+    WSerror_bad_gateway,
+    //1015 is a reserved value and MUST NOT be set as a status code in a Close control frame by an endpoint. It is designated for use in applications expecting a status code to indicate that the connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).
+    WSerror_TLS_handshake_fail
+}WSerror_t;
+
 typedef struct {
     bool fin;
     bool rsv1;
@@ -40,7 +72,6 @@ typedef struct {
 #define WEBSOCKETS_YIELD() delay(0)
 #define WEBSOCKETS_YIELD_MORE() delay(1)
 #define WEBSOCKETS_TCP_TIMEOUT (5000)
-typedef std::function<void(bool ok)> WSreadWaitCb;
 
 class sMQTTClientWebSocket:public sMQTTClient
 {
@@ -57,7 +88,7 @@ private:
 
 	void handleWebsocketCb();
 	bool handleWebsocketWaitFor(size_t size);
-	bool readCb(uint8_t * out, size_t n, WSreadWaitCb cb);
+	bool readCb(uint8_t * out, size_t n);
 	void handleWebsocketPayloadCb(bool ok, uint8_t * payload);
 	void clientDisconnect(uint16_t code, char * reason = NULL, size_t reasonLen = 0){
 		SMQTT_LOGD("[WS][handleWebsocket] clientDisconnect code: %u\n", code);
@@ -115,7 +146,6 @@ private:
 	int cVersion;
 	String base64Authorization, _base64Authorization;
 	String cUrl, cKey, cProtocol, cExtensions, cSessionId;
-	bool cIsClient, isSocketIO;
 
 	int cWsRXsize; ///< State of the RX
     uint8_t cWsHeader[WEBSOCKETS_MAX_HEADER_SIZE];    ///< RX WS Message buffer

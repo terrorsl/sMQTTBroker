@@ -4,8 +4,6 @@
 sMQTTClientWebSocket::sMQTTClientWebSocket(sMQTTBroker *parent, TCPClient &client):sMQTTClient(parent, client), status(WSC_HEADER)
 {
 	_mandatoryHttpHeaderCount=0;
-    isSocketIO=false;
-    cIsClient=false;
 };
 void sMQTTClientWebSocket::write(const char* buf, size_t length)
 {
@@ -37,7 +35,7 @@ void sMQTTClientWebSocket::update()
 			break;
         default:
             SMQTT_LOGD("[WS-Server][handleClientData] unknown client status %d", status);
-            clientDisconnect(1002);
+            clientDisconnect(WSerror_close_protocol_error);
             break;
 		}
 	}
@@ -275,7 +273,7 @@ bool sMQTTClientWebSocket::sendFrame(WSopcode_t opcode, uint8_t * payload, size_
     }
 
     SMQTT_LOGD("[WS][sendFrame] ------- send message frame -------");
-    SMQTT_LOGD("[WS][sendFrame] fin: %u opCode: %u mask: %u length: %u headerToPayload: %u", fin, opcode, cIsClient, length, headerToPayload);
+    SMQTT_LOGD("[WS][sendFrame] fin: %u opCode: %u length: %u headerToPayload: %u", fin, opcode, length, headerToPayload);
 
     if(opcode == WSop_text) {
         SMQTT_LOGD("[WS][sendFrame] text: %s", (payload + (headerToPayload ? 14 : 0)));
@@ -444,7 +442,7 @@ void sMQTTClientWebSocket::handleWebsocketCb()
     if(header->payloadLen > WEBSOCKETS_MAX_DATA_SIZE)
 	{
         SMQTT_LOGD("[WS][handleWebsocket] payload too big! (%u)", header->payloadLen);
-        clientDisconnect(1009);
+        clientDisconnect(WSerror_messsage_too_big);
         return;
     }
 
@@ -465,11 +463,11 @@ void sMQTTClientWebSocket::handleWebsocketCb()
 
         if(!payload) {
             SMQTT_LOGD("[WS][handleWebsocket] to less memory to handle payload %d!", header->payloadLen);
-            clientDisconnect(1011);
+            clientDisconnect(WSerror_server_error);
             return;
         }
         //readCb(payload, header->payloadLen, std::bind(&sMQTTClientWebSocket::handleWebsocketPayloadCb, std::placeholders::_1, payload));
-		if(readCb(payload, header->payloadLen,0))
+		if(readCb(payload, header->payloadLen))
         {
             handleWebsocketPayloadCb(true, payload);
         }
@@ -506,40 +504,26 @@ bool sMQTTClientWebSocket::handleWebsocketWaitFor(size_t size)
         }
     },
                                                                                           this, size, std::placeholders::_1, std::placeholders::_2));*/
-	if(readCb(&cWsHeader[cWsRXsize], (size - cWsRXsize),0))
+	if(readCb(&cWsHeader[cWsRXsize], (size - cWsRXsize)))
     {
         cWsRXsize = size;
         handleWebsocketCb();
     }
     return false;
 }
-bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
+bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n)
 {
     unsigned long t = millis();
     ssize_t len;
     SMQTT_LOGD("[readCb] n: %zu t: %lu", n, t);
     while(n > 0) {
-        /*if(client->tcp == NULL) {
-            DEBUG_WEBSOCKETS("[readCb] tcp is null!\n");
-            if(cb) {
-                cb(client, false);
-            }
-            return false;
-        }*/
-
         /*if(!_client.connected()) {
             SMQTT_LOGD("[readCb] not connected!");
-            if(cb) {
-                cb(false);
-            }
             return false;
         }*/
 
         if((millis() - t) > WEBSOCKETS_TCP_TIMEOUT) {
             SMQTT_LOGD("[readCb] receive TIMEOUT! %lu", (millis() - t));
-            if(cb) {
-                cb(false);
-            }
             return false;
         }
 
@@ -561,10 +545,6 @@ bool sMQTTClientWebSocket::readCb(uint8_t * out, size_t n, WSreadWaitCb cb)
         if(n > 0) {
             WEBSOCKETS_YIELD();
         }
-    }
-    if(cb) {
-        //cb(true);
-
     }
     WEBSOCKETS_YIELD();
 //#endif
@@ -611,7 +591,7 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
                 break;
             case WSop_close: {
 #ifndef NODEBUG_WEBSOCKETS
-                uint16_t reasonCode = 1000;
+                uint16_t reasonCode = WSerror_close_normal;
                 if(header->payloadLen >= 2) {
                     reasonCode = payload[0] << 8 | payload[1];
                 }
@@ -622,11 +602,11 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
                 } else {
                     SMQTT_LOGD("\n");
                 }
-                clientDisconnect(1000);
+                clientDisconnect(WSerror_close_normal);
             } break;
             default:
                 SMQTT_LOGD("[WS][handleWebsocket] got unknown opcode: %d", header->opCode);
-                clientDisconnect(1002);
+                clientDisconnect(WSerror_close_protocol_error);
                 break;
         }
 
@@ -641,7 +621,7 @@ void sMQTTClientWebSocket::handleWebsocketPayloadCb(bool ok, uint8_t * payload)
 	{
         SMQTT_LOGD("[WS][handleWebsocket] missing data!");
         free(payload);
-        clientDisconnect(1002);
+        clientDisconnect(WSerror_close_protocol_error);
     }
 }
 void sMQTTClientWebSocket::handleWebsocket()
@@ -660,7 +640,6 @@ bool sMQTTClientWebSocket::hasMandatoryHeader(String headerName) {
 }
 void sMQTTClientWebSocket::messageReceived(WSopcode_t opcode, uint8_t * payload, size_t length, bool fin)
 {
-    SMQTT_LOGD("opcode:%d length:%d", opcode, length);
 	switch(opcode)
 	{
     case WSop_text:
@@ -669,7 +648,6 @@ void sMQTTClientWebSocket::messageReceived(WSopcode_t opcode, uint8_t * payload,
 		for(int index=0;index<length;index++)
 		{
 			message.incoming(payload[index]);
-            SMQTT_LOGD("payload:%c", payload[index]);
 			if (message.type())
 			{
 				processMessage();
