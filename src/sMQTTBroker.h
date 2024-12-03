@@ -6,6 +6,7 @@ Main class
 
 #include"sMQTTplatform.h"
 #include"sMQTTClient.h"
+#include"sMQTTClientWebSocket.h"
 #include"sMQTTTopic.h"
 #include"sMQTTEvent.h"
 
