@@ -1,6 +1,6 @@
 {
     "name":"sMQTTBroker",
-    "version":"0.1.8",
+    "version":"0.1.9",
     "description":"This library allows to send and receive MQTT messages and to host a broker in your ESP 8266 and ESP 32. It does support MQTT 3.1.1 with QoS=0.",
     "repository":
     {
