@@ -232,7 +232,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
-	int msg_id = clock();
+	int msg_id = millis();
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{
