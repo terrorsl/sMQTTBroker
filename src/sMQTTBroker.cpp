@@ -141,6 +141,7 @@ void sMQTTBroker::publish(sMQTTClient *client, sMQTTTopic *topic, sMQTTMessage *
 		//if ((*sub)->match(topic))
 		if ((*sub)->match(topic->Name()))
 		{
+			msg->DropRetained();
 			sMQTTClientList subList = (*sub)->getSubscribeList();
 			SMQTT_LOGD("topic %s Clients %d", topic->Name(), subList.size());
 			for (auto cl : subList)
@@ -224,7 +225,7 @@ void sMQTTBroker::findRetainTopic(sMQTTTopic *topic, sMQTTClient *client)
 		{
 			SMQTT_LOGD("findRetainTopic %s qos:%d", (*it)->Name(), (*it)->QoS());
 			SMQTT_LOGD("findRetainTopic %s", (*it)->Payload());
-			sMQTTMessage msg(sMQTTMessage::Type::Publish, (*it)->QoS()<<1);
+			sMQTTMessage msg(sMQTTMessage::Type::Publish, ((*it)->QoS()<<1)|1);
 			msg.add((*it)->Name(), strlen((*it)->Name()));
 			// msg_id
 			if ((*it)->QoS()) {
@@ -255,7 +256,7 @@ bool sMQTTBroker::isClientConnected(sMQTTClient *client)
 };
 void sMQTTBroker::publish(const std::string &topic, const std::string &payload, unsigned char qos, bool retain)
 {
-	int msg_id = clock();
+	int msg_id = millis();
 	sMQTTTopicList::iterator sub;
 	for (sub = subscribes.begin(); sub != subscribes.end(); sub++)
 	{

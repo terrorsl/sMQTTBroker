@@ -9,6 +9,9 @@ Main class
 #include"sMQTTTopic.h"
 #include"sMQTTEvent.h"
 
+#define sMQTTBrokerVersion3 3
+#define sMQTTBrokerVersion5 5
+
 class sMQTTBroker
 {
 public:

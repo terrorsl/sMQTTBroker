@@ -98,6 +98,9 @@ public:
 	bool isRetained() {
 		return buffer[0] & 0x1;
 	}
+	void DropRetained() {
+		buffer[0] &= ~0x1;
+	}
 	sMQTTError sendTo(sMQTTClient *, bool needRecalc=true);
 	// buff is MSB/LSB/STRING
 	// output buff+=2, len=length(str)
