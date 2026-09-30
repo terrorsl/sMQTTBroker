@@ -109,6 +109,17 @@ int sMQTTMessage::encodeLength(char* msb, int length) const
 	} while (length);
 	return count;
 };
+void sMQTTMessage::recalculateSize()
+{
+	char *bytes = (char*)buffer.data();
+	char size[4];
+	size[0] = bytes[1];
+	if (encodeLength(size, buffer.size() - vheader) > 1)
+	{
+		buffer.insert(buffer.begin() + 2, size[1]);
+	}
+	buffer[1] = size[0];
+};
 sMQTTError sMQTTMessage::sendTo(sMQTTClient *client,bool needRecalc)
 {
 	if (buffer.size())
